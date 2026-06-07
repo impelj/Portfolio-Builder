@@ -3,6 +3,7 @@ import pandas as pd
 from ScannerClassV2 import Fund, PortfolioBuilder
 from Allocations import PORTFOLIO_ALLOCATIONS
 import plotly.express as px
+from PortfolioExporter import build_portfolio_report
 
 st.set_page_config(page_title="Portfolio Builder", layout="wide")
 
@@ -166,6 +167,32 @@ display_breakdown = breakdown_df.copy()
 display_breakdown['Percentage'] = display_breakdown['Percentage'].apply(lambda x: f"{x:.1f}%")
 display_breakdown['Amount'] = display_breakdown['Amount'].apply(lambda x: f"${x:,.2f}")
 st.dataframe(display_breakdown, use_container_width=True, hide_index=True)
+
+# --- PDF Export ---
+st.markdown("---")
+st.subheader("Export Portfolio Report")
+
+client_name = st.text_input("Client Name", placeholder="e.g. John Smith")
+
+if st.button("Generate PDF Report"):
+    if not client_name:
+        st.error("Please enter a client name before generating the report.")
+    else:
+        with st.spinner("Generating PDF..."):
+            pdf_buffer = build_portfolio_report(
+                portfolio=portfolio,
+                allocations=builder.allocations,
+                client_name=client_name,
+                portfolio_name=portfolio_choice,
+                investment_amount=investment_amount
+            )
+
+        st.download_button(
+            label="📥 Download PDF Report",
+            data=pdf_buffer,
+            file_name=f"{client_name.replace(' ', '_')}_{portfolio_choice}_Portfolio.pdf",
+            mime="application/pdf"
+        )
 
 
 # Show summary
