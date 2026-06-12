@@ -8,7 +8,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Conservative Allocation']
             },
             'US Equity Small Cap': {
-                'pct': 0.02,
+                'pct': 0.01,
                 'categories': ['Small Value', 'Small Blend', 'Small Growth', 'Small Company']
             },
             'US Equity Mid Cap': {
