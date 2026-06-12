@@ -4,7 +4,7 @@ PORTFOLIO_ALLOCATIONS = {
         'description': '25% Equity, 75% Fixed Income',
         'allocations': {
             'US Equity Large Cap': {
-                'pct': 0.10,
+                'pct': 0.14,
                 'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Conservative Allocation']
             },
             'US Equity Small Cap': {
@@ -12,11 +12,11 @@ PORTFOLIO_ALLOCATIONS = {
                 'categories': ['Small Value', 'Small Blend', 'Small Growth', 'Small Company']
             },
             'US Equity Mid Cap': {
-                'pct': 0.01,
+                'pct': 0.03,
                 'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'Non-US Equity Large Cap': {
-                'pct': 0.04,
+                'pct': 0.05,
                 'categories': ['Foreign Stock', 'Europe Stock', 'Pacific Stock','Japan Stock', 'Latin America Stock', 'China Region','Diversified Pacific/Asia',\
                                 'Foreign Large Blend', 'Foreign Large Growth', 'Foreign Large Value', 'India Equity','Global Conservative Allocation']
             },

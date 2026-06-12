@@ -277,11 +277,11 @@ def build_portfolio_report(
 
     col_headers = [
         'Symbol', 'Allocation\n%', 'Volatility', 'Name',
-        'Asset Class', 'Expense\nRatio', 'Yield', 'Total\nReturn'
+        'Asset Class', 'Expense\nRatio', 'Yield', '1 YR Total\nReturn'
     ]
     col_widths = [
         0.55*inch, 0.75*inch, 0.55*inch, 1.8*inch,
-        1.3*inch, 0.55*inch, 0.55*inch, 0.55*inch
+        1.3*inch, 0.75*inch, 0.55*inch, 0.75*inch
     ]
 
     table_data = [[Paragraph(h, header_cell_style) for h in col_headers]]
@@ -316,15 +316,19 @@ def build_portfolio_report(
 
     # Total row
     total_pct = sum(pct for _, pct, _ in rows)
+    total_volatility = sum(vol for _, _, vol in rows)
+    total_expense = sum(exp for _, _, exp in rows)
+    total_yield = sum(yield_val for _, _, yield_val in rows)
+    total_return = sum(ret for _, _, ret in rows)
     table_data.append([
         Paragraph('<b>Total:</b>', center_cell_style),
         Paragraph(f'<b>{total_pct}%</b>', center_cell_style),
-        Paragraph('', center_cell_style),
+        Paragraph(f'<b>{total_volatility}</b>', center_cell_style),
         Paragraph('', cell_style),
         Paragraph('', cell_style),
-        Paragraph('', center_cell_style),
-        Paragraph('', center_cell_style),
-        Paragraph('', center_cell_style),
+        Paragraph(f'<b>{total_expense}</b>', center_cell_style),
+        Paragraph(f'<b>{total_yield}</b>', center_cell_style),
+        Paragraph(f'<b>{total_return}</b>', center_cell_style),
     ])
 
     holdings_table = Table(table_data, colWidths=col_widths, repeatRows=1)
