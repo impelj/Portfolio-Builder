@@ -316,19 +316,19 @@ def build_portfolio_report(
 
     # Total row
     total_pct = sum(pct for _, pct, _ in rows)
-    total_volatility = sum(vol for _, vol, _ in rows)
-    total_expense = sum(exp for _, exp, _ in rows)
-    total_yield = sum(yield_val for _, yield_val, _ in rows)
-    total_return = sum(ret for _, ret, _ in rows)
+    avg_volatility = (sum(vol for _, vol, _ in rows) / len(rows)) if rows else 0
+    avg_expense =  (sum(exp for _, exp, _ in rows) / len(rows)) if rows else 0
+    avg_yield = (sum(yield_val for _, yield_val, _ in rows) / len(rows)) if rows else 0
+    avg_return = (sum(ret for _, ret, _ in rows) / len(rows)) if rows else 0
     table_data.append([
         Paragraph('<b>Total:</b>', center_cell_style),
         Paragraph(f'<b>{total_pct}%</b>', center_cell_style),
-        Paragraph(f'<b>{total_volatility}</b>', center_cell_style),
+        Paragraph(f'<b>{avg_volatility:.2f}%</b>', center_cell_style),
         Paragraph('', cell_style),
         Paragraph('', cell_style),
-        Paragraph(f'<b>{total_expense}</b>', center_cell_style),
-        Paragraph(f'<b>{total_yield}</b>', center_cell_style),
-        Paragraph(f'<b>{total_return}</b>', center_cell_style),
+        Paragraph(f'<b>{avg_expense:.2f}%</b>', center_cell_style),
+        Paragraph(f'<b>{avg_yield:.2f}%</b>', center_cell_style),
+        Paragraph(f'<b>{avg_return:.2f}%</b>', center_cell_style),
     ])
 
     holdings_table = Table(table_data, colWidths=col_widths, repeatRows=1)
