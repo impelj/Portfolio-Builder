@@ -316,10 +316,10 @@ def build_portfolio_report(
 
     # Total row
     total_pct = sum(pct for _, pct, _ in rows)
-    total_volatility = sum(vol for _, _, vol in rows)
-    total_expense = sum(exp for _, _, exp in rows)
-    total_yield = sum(yield_val for _, _, yield_val in rows)
-    total_return = sum(ret for _, _, ret in rows)
+    total_volatility = sum(vol for _, vol, _ in rows)
+    total_expense = sum(exp for _, exp, _ in rows)
+    total_yield = sum(yield_val for _, yield_val, _ in rows)
+    total_return = sum(ret for _, ret, _ in rows)
     table_data.append([
         Paragraph('<b>Total:</b>', center_cell_style),
         Paragraph(f'<b>{total_pct}%</b>', center_cell_style),
