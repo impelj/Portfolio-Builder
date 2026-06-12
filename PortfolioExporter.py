@@ -280,7 +280,7 @@ def build_portfolio_report(
         'Asset Class', 'Expense\nRatio', 'Yield', 'Total\nReturn'
     ]
     col_widths = [
-        0.55*inch, 0.65*inch, 0.55*inch, 1.8*inch,
+        0.55*inch, 0.75*inch, 0.55*inch, 1.8*inch,
         1.3*inch, 0.55*inch, 0.55*inch, 0.55*inch
     ]
 
