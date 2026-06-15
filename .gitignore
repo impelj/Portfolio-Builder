@@ -1,0 +1,5 @@
+
+# Generated reports and temp files
+*.pdf
+~$*.xlsx
+.DS_Store
