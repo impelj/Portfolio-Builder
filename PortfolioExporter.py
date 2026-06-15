@@ -314,6 +314,7 @@ def build_portfolio_report(
         ]
         table_data.append(row)
 
+    # Total row
     total_pct = sum(pct for _, pct, _ in rows)
     if rows and total_pct > 0:
         avg_volatility = sum(fund.std3yr * pct for fund, pct, _ in rows) / total_pct
