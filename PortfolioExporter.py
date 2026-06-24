@@ -101,10 +101,16 @@ def build_asset_class_summary(rows):
 
     return sorted(summary.items(), key=lambda x: x[1], reverse=True)
 
-def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
+def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
     """Generate a donut chart of asset allocation, return as ReportLab Image."""
+    import math
+
     labels = [name for name, pct in asset_summary]
     sizes  = [pct  for _, pct  in asset_summary]
+
+    # Match document font
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica']
 
     chart_colors = [
         '#003366', '#336699', '#6699CC', '#99BBDD',
@@ -114,38 +120,44 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
 
     fig, ax = plt.subplots(figsize=(5, 5))
     fig.patch.set_alpha(0)
+    # Give breathing room on all sides for leader lines
+    fig.subplots_adjust(top=0.92, bottom=0.08, left=0.15, right=0.85)
 
-    # Reserve bottom 30% for legend — no surprises from tight layout
-    fig.subplots_adjust(top=0.92, bottom=0.30, left=0.05, right=0.95)
-
-    wedges, _, autotexts = ax.pie(
+    wedges, _ = ax.pie(
         sizes,
         labels=None,
-        autopct=lambda pct: f'{pct:.0f}%' if pct >= 5 else '',
+        autopct=None,       # We handle labels manually
         startangle=90,
         wedgeprops=dict(width=0.5, edgecolor='white', linewidth=1.5),
-        colors=chart_colors[:len(labels)]
+        colors=chart_colors[:len(sizes)]
     )
-    # Change white to dark blue for visibility on white PDF background
-    for at in autotexts:
-        at.set_fontsize(9)
-        at.set_color("#FBFBFB")
-        at.set_fontname('Helvetica-Bold')
-        at.set_fontweight('bold')
 
-    ax.legend(
-        wedges,
-        [f'{l} ({s}%)' for l, s in zip(labels, sizes)],
-        loc='upper center',
-        bbox_to_anchor=(0.5, -0.05),
-        fontsize=10,        # up from 5.5
-        frameon=False,
-        ncol=2
-    )
-    
+    for wedge, pct in zip(wedges, sizes):
+        angle = (wedge.theta1 + wedge.theta2) / 2
+        rad   = math.radians(angle)
+        cos_a = math.cos(rad)
+        sin_a = math.sin(rad)
+
+        if pct >= 8:
+            # Large slice: label inside the donut ring
+            ax.text(
+                0.65 * cos_a, 0.65 * sin_a,
+                f'{pct}%',
+                ha='center', va='center',
+                fontsize=9, color='#003366', fontweight='bold'
+            )
+        else:
+            # Small slice: label outside with leader line
+            ax.annotate(
+                f'{pct}%',
+                xy=(0.85 * cos_a, 0.85 * sin_a),       # tip of arrow (wedge edge)
+                xytext=(1.25 * cos_a, 1.25 * sin_a),   # label position
+                fontsize=8, color='#003366', fontweight='bold',
+                ha='center', va='center',
+                arrowprops=dict(arrowstyle='->', color='#666666', lw=0.7)
+            )
 
     buf = BytesIO()
-    # No bbox_inches='tight' — fixed figsize gives predictable dimensions
     plt.savefig(buf, format='png', dpi=150, facecolor='none', edgecolor='none')
     plt.close(fig)
     buf.seek(0)
