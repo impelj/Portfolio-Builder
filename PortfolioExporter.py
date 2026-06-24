@@ -152,10 +152,10 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
         if pct >= 8:
             # Large slice: label inside the donut ring
             ax.text(
-                0.65 * cos_a, 0.65 * sin_a,
+                0.75 * cos_a, 0.75 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontsize=9, color='#003366', fontweight='bold'
+                fontsize=11, color='#003366', fontweight='bold'
             )
         else:
             small_items.append((wedge, pct, angle, rad, cos_a, sin_a))
@@ -175,7 +175,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
             f'{pct}%',
             xy=(0.85 * cos_a, 0.85 * sin_a),        # arrow tip at wedge edge
             xytext=(1.4 * label_cos, 1.4 * label_sin),  # spread label outward
-            fontsize=8, color='#003366', fontweight='bold',
+            fontsize=10, color='#003366', fontweight='bold',
             ha='center', va='center',
             arrowprops=dict(arrowstyle='->', color='#666666', lw=0.8)
         )
@@ -216,14 +216,14 @@ def build_portfolio_report(
     header_style = ParagraphStyle(
         'Header',
         parent=styles['Normal'],
-        fontSize=10,
+        fontSize=11,
         textColor=DARK_GRAY,
         alignment=TA_RIGHT
     )
     subtitle_style = ParagraphStyle(
         'Subtitle',
         parent=styles['Normal'],
-        fontSize=11,
+        fontSize=12,
         textColor=DARK_BLUE,
         fontName='Helvetica-Bold',
         spaceAfter=4
@@ -231,31 +231,31 @@ def build_portfolio_report(
     small_style = ParagraphStyle(
         'Small',
         parent=styles['Normal'],
-        fontSize=8,
+        fontSize=9,
         textColor=DARK_GRAY
     )
     header_cell_style = ParagraphStyle(
         'TableHeader',
-        fontSize=7,
+        fontSize=8,
         fontName='Helvetica-Bold',
         textColor=WHITE,
         alignment=TA_CENTER
     )
     cell_style = ParagraphStyle(
         'TableCell',
-        fontSize=7,
+        fontSize=8,
         textColor=DARK_GRAY,
         alignment=TA_LEFT
     )
     center_cell_style = ParagraphStyle(
         'CenterCell',
-        fontSize=7,
+        fontSize=8,
         textColor=DARK_GRAY,
         alignment=TA_CENTER
     )
     summary_header_style = ParagraphStyle(
         'SummaryHeader',
-        fontSize=7,
+        fontSize=8,
         fontName='Helvetica-Bold',
         textColor=WHITE,
         alignment=TA_CENTER
