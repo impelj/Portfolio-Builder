@@ -30,6 +30,13 @@ def get_num_funds(allocation_pct: float) -> int:
     else:
         return 3
 
+def build_pie_chart(asset_summary):
+    """
+    Build a pie chart representing the asset class distribution.
+    Returns a PieChart object.
+    """
+    # Placeholder for actual pie chart implementation
+    pass
 
 def build_portfolio_rows(portfolio, allocations):
     """
@@ -201,6 +208,14 @@ def build_portfolio_report(
     story.append(Spacer(1, 4))
     story.append(Paragraph(f'Timeframe: {timeframe_start} to {timeframe_end}', small_style))
     story.append(Spacer(1, 12))
+
+    # --- Pie Chart ---
+    pie_chart = build_pie_chart(asset_summary)
+    story.append(pie_chart)
+    story.append(Spacer(1, 12))
+    story.append(Paragraph('The pie chart above illustrates the distribution of the portfolio across different asset classes.', small_style))
+    story.append(Spacer(1, 12))
+
 
     # --- Build rows first (needed for summary) ---
     rows = build_portfolio_rows(portfolio, allocations)

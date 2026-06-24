@@ -25,28 +25,32 @@ def load_funds():
     # Convert to Fund objects
     funds = []
     for _, row in df.iterrows():
-        fund = Fund(
-        name=row['name'],
-        ticker=row['ticker'],
-        category=row['objname'],
-        expense_ratio=float(row['expratio']) if pd.notna(row['expratio']) else 0,
-        return_1yr=float(row['tr1yr']) if pd.notna(row['tr1yr']) else 0,
-        return_3yr=float(row['tr3yr']) if pd.notna(row['tr3yr']) else 0,
-        return_5yr=float(row['tr5yr']) if pd.notna(row['tr5yr']) else 0,
-        beta=float(row['beta']) if pd.notna(row['beta']) else 1.0,
-        alpha=float(row['alpha']) if pd.notna(row['alpha']) else 0,
-        sharpe_ratio=float(row['sharpratio']) if pd.notna(row['sharpratio']) else 0,
-        morningstar_category=row['catname'] if pd.notna(row.get('catname')) else None,
-        std3yr=float(row['std3yr']) if pd.notna(row['std3yr']) else 0,
-        yield_val=float(row['secyield']) if pd.notna(row['secyield']) else 0
-        )
+        name= row['name'] if pd.notna(row['name']) else ''
+        if name.endswith(' A') or name.endswith(' C'):
+            continue  # Skip A and C share classes
         
+        fund = Fund(
+            name=row['name'],
+            ticker=row['ticker'],
+            category=row['objname'],
+            expense_ratio=float(row['expratio']) if pd.notna(row['expratio']) else 0,
+            return_1yr=float(row['tr1yr']) if pd.notna(row['tr1yr']) else 0,
+            return_3yr=float(row['tr3yr']) if pd.notna(row['tr3yr']) else 0,
+            return_5yr=float(row['tr5yr']) if pd.notna(row['tr5yr']) else 0,
+            beta=float(row['beta']) if pd.notna(row['beta']) else 1.0,
+            alpha=float(row['alpha']) if pd.notna(row['alpha']) else 0,
+            sharpe_ratio=float(row['sharpratio']) if pd.notna(row['sharpratio']) else 0,
+            morningstar_category=row['catname'] if pd.notna(row.get('catname')) else None,
+            std3yr=float(row['std3yr']) if pd.notna(row['std3yr']) else 0,
+            yield_val=float(row['secyield']) if pd.notna(row['secyield']) else 0
+            
+            
+        )   
         funds.append(fund)
-    small_cap_funds = [f for f in funds if 'Small' in f.category]
-    real_estate_funds = [f for f in funds if 'Real Estate' in f.category]
-    
-    
-    return funds
+        small_cap_funds = [f for f in funds if 'Small' in f.category]
+        real_estate_funds = [f for f in funds if 'Real Estate' in f.category]
+        
+        return funds
     
 
 try:
