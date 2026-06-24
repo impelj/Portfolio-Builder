@@ -101,7 +101,7 @@ def build_asset_class_summary(rows):
 
     return sorted(summary.items(), key=lambda x: x[1], reverse=True)
 
-def build_pie_chart_image(asset_summary, width=3.8, height=3.2):
+def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
     """Generate a donut chart of asset allocation, return as ReportLab Image."""
     labels = [name for name, pct in asset_summary]
     sizes  = [pct  for _, pct  in asset_summary]
@@ -112,8 +112,11 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.2):
         '#005599', '#66B2FF', '#CCE0EE', '#99CCFF'
     ]
 
-    fig, ax = plt.subplots(figsize=(5, 4))
+    fig, ax = plt.subplots(figsize=(5, 5))
     fig.patch.set_alpha(0)
+
+    # Reserve bottom 30% for legend — no surprises from tight layout
+    fig.subplots_adjust(top=0.92, bottom=0.30, left=0.05, right=0.95)
 
     wedges, _, autotexts = ax.pie(
         sizes,
@@ -128,21 +131,19 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.2):
         at.set_color('white')
         at.set_fontweight('bold')
 
-    # Legend below the chart, two columns
     ax.legend(
         wedges,
         [f'{l} ({s}%)' for l, s in zip(labels, sizes)],
         loc='upper center',
         bbox_to_anchor=(0.5, -0.05),
-        fontsize=6,
+        fontsize=5.5,
         frameon=False,
         ncol=2
     )
 
-    plt.tight_layout()
     buf = BytesIO()
-    plt.savefig(buf, format='png', dpi=150, bbox_inches='tight',
-                facecolor='none', edgecolor='none')
+    # No bbox_inches='tight' — fixed figsize gives predictable dimensions
+    plt.savefig(buf, format='png', dpi=150, facecolor='none', edgecolor='none')
     plt.close(fig)
     buf.seek(0)
 
