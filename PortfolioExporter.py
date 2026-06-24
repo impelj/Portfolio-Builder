@@ -112,6 +112,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
     plt.rcParams['font.family'] = 'sans-serif'
     plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica']
 
+    
     chart_colors = [
     '#4472C4',  # blue
     '#FFC000',  # yellow
@@ -126,6 +127,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
     '#CCCCCC',  # gray
     '#FF9900',  # orange
     ]
+    
 
     fig, ax = plt.subplots(figsize=(5, 5))
     fig.patch.set_alpha(0)
