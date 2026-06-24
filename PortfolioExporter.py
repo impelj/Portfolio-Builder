@@ -113,8 +113,8 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
     plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica']
 
     chart_colors = [
-        "#FFF024", "#5BDD5B", "#DB5015", "#49DBD8",
-        "#008033", "#EA6363", '#3399FF', "#FF0000",
+        "#A09500", "#008600", "#752300", "#749797",
+        "#003214", "#6B2D2D", "#28496A", "#9D6767",
         '#005599', '#66B2FF', '#CCE0EE', '#99CCFF'
     ]
 
@@ -144,7 +144,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
                 0.75 * cos_a, 0.75 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontname='Helvetica', fontsize=9, color="#000000", fontweight='bold'
+                fontname='Helvetica', fontsize=9, color="#000000"
             )
         else:
             # Small slice: label outside with leader line
@@ -152,7 +152,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
                 f'{pct}%',
                 xy=(0.85 * cos_a, 0.85 * sin_a),       # tip of arrow (wedge edge)
                 xytext=(1.25 * cos_a, 1.25 * sin_a),   # label position
-                fontsize=8, color='#003366', fontweight='bold',
+                fontsize=8, color="#000000", fontname='Helvetica',
                 ha='center', va='center',
                 arrowprops=dict(arrowstyle='->', color='#666666', lw=0.7)
             )
