@@ -155,7 +155,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
                 0.75 * cos_a, 0.75 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontsize=12, color='#003366', fontweight='bold', fontname='DejaVu Sans'
+                fontsize=11, color='#003366', fontname='DejaVu Sans'
             )
         # Small slices: no label, legend handles it
 
