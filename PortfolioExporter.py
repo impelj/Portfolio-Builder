@@ -184,7 +184,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
         labels,               # just names, no percentages (already on chart)
         loc='upper center',
         bbox_to_anchor=(0.5, -0.05),
-        fontsize=6,
+        fontsize=9,
         frameon=False,
         ncol=2,
         handleheight=0.8,
