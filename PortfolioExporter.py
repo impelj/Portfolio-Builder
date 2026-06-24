@@ -113,11 +113,19 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
     plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica']
 
     chart_colors = [
-        "#A09500", "#008600", "#752300", "#749797",
-        "#003214", "#6B2D2D", "#28496A", "#9D6767",
-        '#005599', '#66B2FF', '#CCE0EE', '#99CCFF'
+    '#4472C4',  # steel blue (their dominant color)
+    '#FFC000',  # golden yellow
+    '#70AD47',  # medium green
+    '#FF0000',  # red
+    '#2E5FA3',  # darker blue variant
+    '#E6A000',  # darker gold variant
+    '#507E32',  # darker green variant
+    '#CC0000',  # darker red variant
+    '#7096D1',  # lighter blue variant
+    '#FFD966',  # lighter yellow variant
+    '#A9D18E',  # lighter green variant
+    '#FF6666',  # lighter red variant
     ]
-
     fig, ax = plt.subplots(figsize=(5, 5))
     fig.patch.set_alpha(0)
     # Give breathing room on all sides for leader lines
