@@ -166,7 +166,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
     for i, (wedge, pct, angle, rad, cos_a, sin_a) in enumerate(small_items):
         # Spread labels angularly around their actual position to avoid overlap
         n = len(small_items)
-        spread_angle = angle + (i - n / 2) * 10  # 10 degrees apart
+        spread_angle = angle + (i - n / 2) * 18  # 10 degrees apart
         spread_rad   = math.radians(spread_angle)
         label_cos    = math.cos(spread_rad)
         label_sin    = math.sin(spread_rad)
@@ -174,7 +174,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
         ax.annotate(
             f'{pct}%',
             xy=(0.85 * cos_a, 0.85 * sin_a),        # arrow tip at wedge edge
-            xytext=(1.4 * label_cos, 1.4 * label_sin),  # spread label outward
+            xytext=(1.35 * label_cos, 1.35 * label_sin),  # spread label outward
             fontsize=10, color='#003366', fontweight='bold',
             ha='center', va='center',
             arrowprops=dict(arrowstyle='->', color='#666666', lw=0.8)
