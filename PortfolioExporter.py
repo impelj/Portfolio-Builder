@@ -101,7 +101,7 @@ def build_asset_class_summary(rows):
 
     return sorted(summary.items(), key=lambda x: x[1], reverse=True)
 
-def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
+def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
     """Generate a donut chart of asset allocation, return as ReportLab Image."""
     import math
 
@@ -129,7 +129,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
     fig, ax = plt.subplots(figsize=(5, 5))
     fig.patch.set_alpha(0)
     # Give breathing room on all sides for leader lines
-    fig.subplots_adjust(top=1.02, bottom=0.08, left=0.15, right=0.85)
+    fig.subplots_adjust(top=1.02, bottom=0.28, left=0.15, right=0.85)
 
     wedges, _ = ax.pie(
         sizes,
@@ -180,6 +180,17 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
             arrowprops=dict(arrowstyle='->', color='#666666', lw=0.8)
         )
 
+    ax.legend(
+        wedges,
+        labels,               # just names, no percentages (already on chart)
+        loc='upper center',
+        bbox_to_anchor=(0.5, -0.05),
+        fontsize=6,
+        frameon=False,
+        ncol=2,
+        handleheight=0.8,
+        handlelength=1.0,
+    )
     buf = BytesIO()
     plt.savefig(buf, format='png', dpi=150, facecolor='none', edgecolor='none')
     plt.close(fig)
