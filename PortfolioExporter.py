@@ -281,7 +281,7 @@ def build_portfolio_report(
 
     header_data = [
         [
-            Paragraph(f'<b>LIONHEART {portfolio_name.upper()}</b>', ParagraphStyle(
+            Paragraph(f'<b>LIONHEART {portfolio_name}</b>', ParagraphStyle(
                 'Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold'
             )),
             Paragraph(
@@ -367,7 +367,7 @@ def build_portfolio_report(
         'Asset Class', 'Expense\nRatio', 'Yield', '1 YR Total\nReturn'
     ]
     col_widths = [
-        0.55*inch, 0.75*inch, 0.55*inch, 1.8*inch,
+        0.55*inch, 0.85*inch, 0.65*inch, 1.8*inch,
         1.3*inch, 0.75*inch, 0.55*inch, 0.75*inch
     ]
 
