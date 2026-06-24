@@ -140,6 +140,9 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
         colors=chart_colors[:len(sizes)]
     )
 
+    # Collect large and small slices separately
+    small_items = []
+
     for wedge, pct in zip(wedges, sizes):
         angle = (wedge.theta1 + wedge.theta2) / 2
         rad   = math.radians(angle)
@@ -149,21 +152,33 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
         if pct >= 8:
             # Large slice: label inside the donut ring
             ax.text(
-                0.75 * cos_a, 0.75 * sin_a,
+                0.65 * cos_a, 0.65 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontname='Helvetica', fontsize=9, color="#000000"
+                fontsize=9, color='#003366', fontweight='bold'
             )
         else:
-            # Small slice: label outside with leader line
-            ax.annotate(
-                f'{pct}%',
-                xy=(0.85 * cos_a, 0.85 * sin_a),       # tip of arrow (wedge edge)
-                xytext=(1.25 * cos_a, 1.25 * sin_a),   # label position
-                fontsize=8, color="#000000", fontname='Helvetica',
-                ha='center', va='center',
-                arrowprops=dict(arrowstyle='->', color='#666666', lw=0.7)
-            )
+            small_items.append((wedge, pct, angle, rad, cos_a, sin_a))
+
+    # Sort small slices by angle so staggering is consistent
+    small_items.sort(key=lambda x: x[2])
+
+    for i, (wedge, pct, angle, rad, cos_a, sin_a) in enumerate(small_items):
+        # Spread labels angularly around their actual position to avoid overlap
+        n = len(small_items)
+        spread_angle = angle + (i - n / 2) * 10  # 10 degrees apart
+        spread_rad   = math.radians(spread_angle)
+        label_cos    = math.cos(spread_rad)
+        label_sin    = math.sin(spread_rad)
+
+        ax.annotate(
+            f'{pct}%',
+            xy=(0.85 * cos_a, 0.85 * sin_a),        # arrow tip at wedge edge
+            xytext=(1.4 * label_cos, 1.4 * label_sin),  # spread label outward
+            fontsize=8, color='#003366', fontweight='bold',
+            ha='center', va='center',
+            arrowprops=dict(arrowstyle='->', color='#666666', lw=0.8)
+        )
 
     buf = BytesIO()
     plt.savefig(buf, format='png', dpi=150, facecolor='none', edgecolor='none')
