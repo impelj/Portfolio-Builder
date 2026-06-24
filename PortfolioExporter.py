@@ -128,8 +128,8 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
     )
     # Change white to dark blue for visibility on white PDF background
     for at in autotexts:
-        at.set_fontsize(8)
-        at.set_color('#003366')
+        at.set_fontsize(10)
+        at.set_color("#5D6975")
         at.set_fontweight('bold')
 
     ax.legend(
@@ -137,7 +137,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
         [f'{l} ({s}%)' for l, s in zip(labels, sizes)],
         loc='upper center',
         bbox_to_anchor=(0.5, -0.05),
-        fontsize=7,        # up from 5.5
+        fontsize=12,        # up from 5.5
         frameon=False,
         ncol=2
     )
