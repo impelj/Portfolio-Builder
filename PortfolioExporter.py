@@ -281,12 +281,11 @@ def build_portfolio_report(
 
     header_data = [
         [
-            Paragraph('<b>ASPIRE</b>', ParagraphStyle(
+            Paragraph(f'<b>LIONHEART</b>{portfolio_name}</b>', ParagraphStyle(
                 'Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold'
             )),
             Paragraph(
                 f'Prepared For: <b>{client_name}</b><br/>'
-                f'Risk Profile: <b>{portfolio_name}</b><br/>'
                 f'Date: {today}<br/>'
                 f'Investment Amount: <b>${investment_amount:,.2f}</b>',
                 header_style
