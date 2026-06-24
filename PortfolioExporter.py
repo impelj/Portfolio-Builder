@@ -152,7 +152,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
         cos_a = math.cos(rad)
         sin_a = math.sin(rad)
 
-        if pct >= 8:
+        if pct >= 5:
             # Only label slices big enough to hold text
             ax.text(
                 0.75 * cos_a, 0.75 * sin_a,
