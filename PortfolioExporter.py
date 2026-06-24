@@ -121,15 +121,16 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
     wedges, _, autotexts = ax.pie(
         sizes,
         labels=None,
-        autopct=lambda pct: f'{pct:.0f}%' if pct >= 5 else '',
+        autopct=lambda pct: f'{pct:.0f}%' if pct >= 5 else ''   ,
         startangle=90,
         wedgeprops=dict(width=0.5, edgecolor='white', linewidth=1.5),
         colors=chart_colors[:len(labels)]
     )
     # Change white to dark blue for visibility on white PDF background
     for at in autotexts:
-        at.set_fontsize(10)
+        at.set_fontsize(19)
         at.set_color("#FBFBFB")
+        at.set_fontname('Helvetica-Bold')
         at.set_fontweight('bold')
 
     ax.legend(
