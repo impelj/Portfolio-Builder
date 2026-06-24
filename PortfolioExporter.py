@@ -281,7 +281,7 @@ def build_portfolio_report(
 
     header_data = [
         [
-            Paragraph(f'<b>LIONHEART{portfolio_name}</b>', ParagraphStyle(
+            Paragraph(f'<b>LIONHEART {portfolio_name.upper()}</b>', ParagraphStyle(
                 'Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold'
             )),
             Paragraph(
