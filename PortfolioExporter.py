@@ -141,10 +141,10 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
         if pct >= 8:
             # Large slice: label inside the donut ring
             ax.text(
-                0.65 * cos_a, 0.65 * sin_a,
+                0.75 * cos_a, 0.65 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontsize=9, color='#003366', fontweight='bold'
+                fontsize=9, color="#000000", fontweight='bold'
             )
         else:
             # Small slice: label outside with leader line
