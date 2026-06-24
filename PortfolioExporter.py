@@ -7,6 +7,10 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from io import BytesIO
 from datetime import date
 from collections import defaultdict
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from reportlab.platypus import Image
 
 # RFG-style color scheme
 DARK_BLUE = colors.HexColor('#003366')
@@ -103,6 +107,50 @@ def build_asset_class_summary(rows):
         summary[allocation_name] += pct
 
     return sorted(summary.items(), key=lambda x: x[1], reverse=True)
+
+def build_pie_chart_image(asset_summary, width=3.8, height=3.0):
+    """Generate a donut chart of asset allocation, return as ReportLab Image."""
+    labels = [name for name, pct in asset_summary]
+    sizes  = [pct  for _, pct  in asset_summary]
+
+    chart_colors = [
+        '#003366', '#336699', '#6699CC', '#99BBDD',
+        '#004080', '#0066CC', '#3399FF', '#002244',
+        '#005599', '#66B2FF', '#CCE0EE', '#99CCFF'
+    ]
+
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
+    fig.patch.set_alpha(0)  # transparent background
+
+    wedges, _, autotexts = ax.pie(
+        sizes,
+        labels=None,
+        autopct=lambda pct: f'{pct:.0f}%' if pct >= 5 else '',
+        startangle=90,
+        wedgeprops=dict(width=0.5, edgecolor='white', linewidth=1.5),
+        colors=chart_colors[:len(labels)]
+    )
+    for at in autotexts:
+        at.set_fontsize(7)
+        at.set_color('white')
+        at.set_fontweight('bold')
+
+    ax.legend(
+        wedges,
+        [f'{l} ({s}%)' for l, s in zip(labels, sizes)],
+        loc='upper left',
+        bbox_to_anchor=(1.0, 1.05),
+        fontsize=6,
+        frameon=False
+    )
+
+    buf = BytesIO()
+    plt.savefig(buf, format='png', dpi=150, bbox_inches='tight',
+                facecolor='none', edgecolor='none')
+    plt.close(fig)
+    buf.seek(0)
+
+    return Image(buf, width=width*inch, height=height*inch)
 
 
 def build_portfolio_report(
@@ -221,69 +269,53 @@ def build_portfolio_report(
     rows = build_portfolio_rows(portfolio, allocations)
     asset_summary = build_asset_class_summary(rows)
 
-    # --- Asset Class Summary Table ---
+# --- Asset Class Summary Table ---
     story.append(Paragraph('Portfolio Allocation Summary', subtitle_style))
     story.append(Spacer(1, 4))
 
-    # Split summary into two columns for compact display
     summary_data = [[
         Paragraph('Asset Class', summary_header_style),
         Paragraph('Allocation %', summary_header_style),
         Paragraph('Amount ($)', summary_header_style),
-        Paragraph('Asset Class', summary_header_style),
-        Paragraph('Allocation %', summary_header_style),
-        Paragraph('Amount ($)', summary_header_style),
     ]]
-
-    # Fill two columns
-    half = (len(asset_summary) + 1) // 2
-    left_col = asset_summary[:half]
-    right_col = asset_summary[half:]
-
-    for i in range(half):
-        left_name, left_pct = left_col[i]
-        left_amt = investment_amount * (left_pct / 100)
-
-        if i < len(right_col):
-            right_name, right_pct = right_col[i]
-            right_amt = investment_amount * (right_pct / 100)
-            row = [
-                Paragraph(left_name, cell_style),
-                Paragraph(f'{left_pct}%', center_cell_style),
-                Paragraph(f'${left_amt:,.2f}', center_cell_style),
-                Paragraph(right_name, cell_style),
-                Paragraph(f'{right_pct}%', center_cell_style),
-                Paragraph(f'${right_amt:,.2f}', center_cell_style),
-            ]
-        else:
-            row = [
-                Paragraph(left_name, cell_style),
-                Paragraph(f'{left_pct}%', center_cell_style),
-                Paragraph(f'${left_amt:,.2f}', center_cell_style),
-                Paragraph('', cell_style),
-                Paragraph('', center_cell_style),
-                Paragraph('', center_cell_style),
-            ]
-        summary_data.append(row)
+    for name, pct in asset_summary:
+        amt = investment_amount * (pct / 100)
+        summary_data.append([
+            Paragraph(name, cell_style),
+            Paragraph(f'{pct}%', center_cell_style),
+            Paragraph(f'${amt:,.2f}', center_cell_style),
+        ])
 
     summary_table = Table(
         summary_data,
-        colWidths=[1.8*inch, 0.8*inch, 0.9*inch, 1.8*inch, 0.8*inch, 0.9*inch]
+        colWidths=[1.9*inch, 0.65*inch, 0.95*inch]
     )
     summary_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), DARK_BLUE),
-        ('TEXTCOLOR', (0, 0), (-1, 0), WHITE),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [WHITE, LIGHT_GRAY]),
-        ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#CCCCCC')),
-        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BACKGROUND',    (0, 0), (-1,  0), DARK_BLUE),
+        ('TEXTCOLOR',     (0, 0), (-1,  0), WHITE),
+        ('ROWBACKGROUNDS',(0, 1), (-1, -1), [WHITE, LIGHT_GRAY]),
+        ('GRID',          (0, 0), (-1, -1), 0.25, colors.HexColor('#CCCCCC')),
+        ('TOPPADDING',    (0, 0), (-1, -1), 4),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-        ('LEFTPADDING', (0, 0), (-1, -1), 4),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        # Divider between left and right columns
-        ('LINEAFTER', (2, 0), (2, -1), 1.5, DARK_BLUE),
+        ('LEFTPADDING',   (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING',  (0, 0), (-1, -1), 4),
+        ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
     ]))
-    story.append(summary_table)
+
+    pie_image = build_pie_chart_image(asset_summary)
+
+    side_by_side = Table(
+        [[summary_table, pie_image]],
+        colWidths=[3.5*inch, 4.0*inch]
+    )
+    side_by_side.setStyle(TableStyle([
+        ('VALIGN',        (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING',   (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING',  (0, 0), (-1, -1), 0),
+        ('TOPPADDING',    (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+    ]))
+    story.append(side_by_side)
     story.append(Spacer(1, 12))
 
     # --- Holdings Table ---
