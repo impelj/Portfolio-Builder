@@ -150,15 +150,14 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
         sin_a = math.sin(rad)
 
         if pct >= 8:
-            # Large slice: label inside the donut ring
+            # Only label slices big enough to hold text
             ax.text(
-                0.75 * cos_a, 0.75 * sin_a,
+                0.65 * cos_a, 0.65 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontsize=11, color='#003366', fontweight='bold'
+                fontsize=9, color='#003366', fontweight='bold'
             )
-        else:
-            small_items.append((wedge, pct, angle, rad, cos_a, sin_a))
+        # Small slices: no label, legend handles it
 
     # Sort small slices by angle so staggering is consistent
     small_items.sort(key=lambda x: x[2])
