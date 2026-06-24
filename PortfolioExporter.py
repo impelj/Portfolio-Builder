@@ -129,7 +129,7 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
     fig, ax = plt.subplots(figsize=(5, 5))
     fig.patch.set_alpha(0)
     # Give breathing room on all sides for leader lines
-    fig.subplots_adjust(top=0.92, bottom=0.08, left=0.15, right=0.85)
+    fig.subplots_adjust(top=0.98, bottom=0.08, left=0.15, right=0.85)
 
     wedges, _ = ax.pie(
         sizes,
