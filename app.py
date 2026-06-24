@@ -25,6 +25,7 @@ def load_funds():
     # Convert to Fund objects
     funds = []
     for _, row in df.iterrows():
+        
         name= row['name'] if pd.notna(row['name']) else ''
         if name.endswith(' A') or name.endswith(' C'):
             continue  # Skip A and C share classes
@@ -47,10 +48,10 @@ def load_funds():
             
         )   
         funds.append(fund)
-        small_cap_funds = [f for f in funds if 'Small' in f.category]
-        real_estate_funds = [f for f in funds if 'Real Estate' in f.category]
+    small_cap_funds = [f for f in funds if 'Small' in f.category]
+    real_estate_funds = [f for f in funds if 'Real Estate' in f.category]
         
-        return funds
+    return funds
     
 
 try:
