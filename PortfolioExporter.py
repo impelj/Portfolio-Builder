@@ -126,9 +126,10 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
         wedgeprops=dict(width=0.5, edgecolor='white', linewidth=1.5),
         colors=chart_colors[:len(labels)]
     )
+    # Change white to dark blue for visibility on white PDF background
     for at in autotexts:
-        at.set_fontsize(7)
-        at.set_color('white')
+        at.set_fontsize(8)
+        at.set_color('#003366')
         at.set_fontweight('bold')
 
     ax.legend(
@@ -136,10 +137,11 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.8):
         [f'{l} ({s}%)' for l, s in zip(labels, sizes)],
         loc='upper center',
         bbox_to_anchor=(0.5, -0.05),
-        fontsize=5.5,
+        fontsize=7,        # up from 5.5
         frameon=False,
         ncol=2
     )
+    
 
     buf = BytesIO()
     # No bbox_inches='tight' — fixed figsize gives predictable dimensions
