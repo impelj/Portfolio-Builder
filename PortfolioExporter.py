@@ -113,8 +113,8 @@ def build_pie_chart_image(asset_summary, width=3.8, height=3.5):
     plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica']
 
     chart_colors = [
-        '#003366', '#336699', '#6699CC', '#99BBDD',
-        '#004080', '#0066CC', '#3399FF', '#002244',
+        "#FFF024", "#258625", "#DB5015", "#49DBD8",
+        '#004080', "#EA6363", '#3399FF', '#002244',
         '#005599', '#66B2FF', '#CCE0EE', '#99CCFF'
     ]
 
