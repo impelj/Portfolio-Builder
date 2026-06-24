@@ -152,10 +152,10 @@ def build_pie_chart_image(asset_summary, width=3.8, height=4.2):
         if pct >= 8:
             # Only label slices big enough to hold text
             ax.text(
-                0.65 * cos_a, 0.65 * sin_a,
+                0.75 * cos_a, 0.75 * sin_a,
                 f'{pct}%',
                 ha='center', va='center',
-                fontsize=9, color='#003366', fontweight='bold'
+                fontsize=12, color='#003366', fontweight='bold', fontname='DejaVu Sans'
             )
         # Small slices: no label, legend handles it
 
