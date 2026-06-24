@@ -281,9 +281,10 @@ def build_portfolio_report(
 
     header_data = [
         [
-            Paragraph(f'<b>LIONHEART {portfolio_name}</b>', ParagraphStyle(
-                'Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold'
-            )),
+            Paragraph(
+            f'<b>LIONHEART</b><br/><font size=10>{portfolio_name}</font>',
+                ParagraphStyle('Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold')
+            ),
             Paragraph(
                 f'Prepared For: <b>{client_name}</b><br/>'
                 f'Date: {today}<br/>'
