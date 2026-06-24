@@ -251,18 +251,11 @@ def build_portfolio_report(
     story.append(Spacer(1, 12))
 
     # --- Pie Chart ---
-    pie_chart = build_pie_chart_image(asset_summary)
-    story.append(pie_chart)
-    story.append(Spacer(1, 12))
-    story.append(Paragraph('The pie chart above illustrates the distribution of the portfolio across different asset classes.', small_style))
-    story.append(Spacer(1, 12))
-
-
-    # --- Build rows first (needed for summary) ---
+    # --- Build rows first (needed for everything below) ---
     rows = build_portfolio_rows(portfolio, allocations)
     asset_summary = build_asset_class_summary(rows)
 
-# --- Asset Class Summary Table ---
+    # --- Asset Class Summary Table + Pie Chart (side by side) ---
     story.append(Paragraph('Portfolio Allocation Summary', subtitle_style))
     story.append(Spacer(1, 4))
 
@@ -284,15 +277,15 @@ def build_portfolio_report(
         colWidths=[1.9*inch, 0.65*inch, 0.95*inch]
     )
     summary_table.setStyle(TableStyle([
-        ('BACKGROUND',    (0, 0), (-1,  0), DARK_BLUE),
-        ('TEXTCOLOR',     (0, 0), (-1,  0), WHITE),
-        ('ROWBACKGROUNDS',(0, 1), (-1, -1), [WHITE, LIGHT_GRAY]),
-        ('GRID',          (0, 0), (-1, -1), 0.25, colors.HexColor('#CCCCCC')),
-        ('TOPPADDING',    (0, 0), (-1, -1), 4),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-        ('LEFTPADDING',   (0, 0), (-1, -1), 4),
-        ('RIGHTPADDING',  (0, 0), (-1, -1), 4),
-        ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND',     (0, 0), (-1,  0), DARK_BLUE),
+        ('TEXTCOLOR',      (0, 0), (-1,  0), WHITE),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [WHITE, LIGHT_GRAY]),
+        ('GRID',           (0, 0), (-1, -1), 0.25, colors.HexColor('#CCCCCC')),
+        ('TOPPADDING',     (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING',  (0, 0), (-1, -1), 4),
+        ('LEFTPADDING',    (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING',   (0, 0), (-1, -1), 4),
+        ('VALIGN',         (0, 0), (-1, -1), 'MIDDLE'),
     ]))
 
     pie_image = build_pie_chart_image(asset_summary)
