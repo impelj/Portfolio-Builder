@@ -160,7 +160,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'categories': ['Corporate Bond - High Quality', 'Government Bond - General', 'Government Bond - Treasury', 'Worldwide Bond','Short-Term Inflation-Protected Bond', 'Short-Term Bond','Ultrashort Bond', 'Short Government']
             },
             'Other Fixed Income': {
-                'pct': 0.5,
+                'pct': 0.05,
                 'categories': ['Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
@@ -184,7 +184,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'categories': ['Small Value', 'Small Blend', 'Small Growth']
             },
             'Non-US Equity Large Cap': {
-                'pct': 0.14,
+                'pct': 0.15,
                 'categories': ['Foreign Stock', 'Europe Stock', 'Pacific Stock','Japan Stock', 'Latin America Stock', 'China Region','Diversified Pacific/Asia',\
                                 'Foreign Large Blend', 'Foreign Large Growth', 'Foreign Large Value', 'India Equity', 'Global Aggressive Allocation']
 

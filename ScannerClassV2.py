@@ -34,7 +34,7 @@ class Fund:
         - 15% inverse of expense ratio (lower costs are better)
         """
         if weights is None:
-            weights = {'return': 0.60, 'sharpe': 0.25, 'expense': 0.15}
+            weights = {'return': 0.50, 'sharpe': 0.15, 'expense': 0.35}
         
         # Normalize to 0-1 range
         # 5-year return: 50% is perfect score
