@@ -75,9 +75,9 @@ if 'weight_expense' not in st.session_state:
 
 # Reset button
 def reset_weights():
-    st.session_state.weight_return = 60
-    st.session_state.weight_sharpe = 25
-    st.session_state.weight_expense = 15
+    st.session_state.weight_return = 50
+    st.session_state.weight_sharpe = 10
+    st.session_state.weight_expense = 40
 
 
 weight_return = st.sidebar.slider("Weight for 5-year return", 0, 100, key='weight_return', step=5)
