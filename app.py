@@ -33,7 +33,7 @@ def load_funds():
         fund = Fund(
             name=row['name'],
             ticker=row['ticker'],
-            category=row['objname'],
+            category=row['objname'] if pd.notna(row['objname']) else '',
             expense_ratio=float(row['expratio']) if pd.notna(row['expratio']) else 0,
             return_1yr=float(row['tr1yr']) if pd.notna(row['tr1yr']) else 0,
             return_3yr=float(row['tr3yr']) if pd.notna(row['tr3yr']) else 0,
@@ -48,8 +48,8 @@ def load_funds():
             
         )   
         funds.append(fund)
-    small_cap_funds = [f for f in funds if 'Small' in f.category]
-    real_estate_funds = [f for f in funds if 'Real Estate' in f.category]
+    small_cap_funds = [f for f in funds if f.category and 'Small' in f.category]
+    real_estate_funds = [f for f in funds if f.category and 'Real Estate' in f.category]
         
     return funds
     
