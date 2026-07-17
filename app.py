@@ -11,46 +11,84 @@ st.title("403b Portfolio Builder")
 st.markdown("Selects top funds for each allocation category in each model portfolio.")
 st.subheader("How it works:")
 st.markdown(''' Funds are scored based on a combination of 5-year return, Sharpe Ratio and expense ratio to determine a cumlative scoring guideline for ranking funds within each allocation category. The scores are weighed most heavily on 5-year return counting for 60% of the score, followed by Sharpe at 25% and Expense Ratio at 15%.''')
-# Load the Excel file (cached)
+# File uploader for custom fund universe
+uploaded_file = st.sidebar.file_uploader(
+    "Upload Fund Universe (.xlsx)",
+    type=["xlsx"],
+    help="Leave empty to use the default Aspire 403b fund universe"
+)
+
 @st.cache_data
-def load_funds():
-    df = pd.read_excel('Aspire_403b_funds.xlsx')
-    
-    # Convert text numbers to actual numbers
-    numeric_columns = ['expratio', 'tr1yr', 'tr3yr', 'tr5yr', 'beta', 'alpha', 'sharpratio']
+def load_funds(file_bytes: bytes):
+    import io
+    df = pd.read_excel(io.BytesIO(file_bytes))
+    # ... rest of function unchanged
+
+@st.cache_data
+def load_default_funds():
+    with open('Aspire_403b_funds.xlsx', 'rb') as f:
+        return load_funds(f.read())
+
+try:
+    if uploaded_file is not None:
+        funds = load_funds(uploaded_file.read())
+        st.success(f"✓ Loaded {len(funds)} funds from {uploaded_file.name}")
+    else:
+        funds = load_default_funds()
+        st.success(f"✓ Loaded {len(funds)} funds from default Aspire 403b universe")
+except Exception as e:
+    st.error(f"Error loading Excel file: {e}")
+    st.stop()
+
+def load_funds(file_bytes: bytes):
+    import io
+    df = pd.read_excel(io.BytesIO(file_bytes))
+
+    # Vectorized numeric conversion
+    numeric_columns = ['expratio', 'tr1yr', 'tr3yr', 'tr5yr', 'beta', 'alpha', 'sharpratio', 'std3yr', 'secyield']
     for col in numeric_columns:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
-    
-    # Convert to Fund objects
-    funds = []
-    for _, row in df.iterrows():
-        
-        name= row['name'] if pd.notna(row['name']) else ''
-        if name.endswith(' A') or name.endswith(' C'):
-            continue  # Skip A and C share classes
-        
-        fund = Fund(
-            name=row['name'],
-            ticker=row['ticker'],
-            category=row['objname'] if pd.notna(row['objname']) else '',
-            expense_ratio=float(row['expratio']) if pd.notna(row['expratio']) else 0,
-            return_1yr=float(row['tr1yr']) if pd.notna(row['tr1yr']) else 0,
-            return_3yr=float(row['tr3yr']) if pd.notna(row['tr3yr']) else 0,
-            return_5yr=float(row['tr5yr']) if pd.notna(row['tr5yr']) else 0,
-            beta=float(row['beta']) if pd.notna(row['beta']) else 1.0,
-            alpha=float(row['alpha']) if pd.notna(row['alpha']) else 0,
-            sharpe_ratio=float(row['sharpratio']) if pd.notna(row['sharpratio']) else 0,
-            morningstar_category=row['catname'] if pd.notna(row.get('catname')) else None,
-            std3yr=float(row['std3yr']) if pd.notna(row['std3yr']) else 0,
-            yield_val=float(row['secyield']) if pd.notna(row['secyield']) else 0
-            
-            
-        )   
-        funds.append(fund)
-    small_cap_funds = [f for f in funds if f.category and 'Small' in f.category]
-    real_estate_funds = [f for f in funds if f.category and 'Real Estate' in f.category]
-        
+
+    # Fill NaN values before bulk operations
+    df['name']       = df['name'].fillna('')
+    df['ticker']     = df['ticker'].fillna('')
+    df['objname']    = df['objname'].fillna('')
+    df['catname']    = df['catname'].fillna('')
+    df['expratio']   = df['expratio'].fillna(0)
+    df['tr1yr']      = df['tr1yr'].fillna(0)
+    df['tr3yr']      = df['tr3yr'].fillna(0)
+    df['tr5yr']      = df['tr5yr'].fillna(0)
+    df['beta']       = df['beta'].fillna(1.0)
+    df['alpha']      = df['alpha'].fillna(0)
+    df['sharpratio'] = df['sharpratio'].fillna(0)
+    df['std3yr']     = df['std3yr'].fillna(0)
+    df['secyield']   = df['secyield'].fillna(0)
+
+    # Filter A and C share classes (vectorized — no Python loop)
+    mask = ~(df['name'].str.endswith(' A') | df['name'].str.endswith(' C'))
+    df = df[mask].reset_index(drop=True)
+
+    # Build all Fund objects at once from filtered dataframe
+    funds = [
+        Fund(
+            name=row.name_col,
+            ticker=row.ticker,
+            category=row.objname,
+            expense_ratio=row.expratio,
+            return_1yr=row.tr1yr,
+            return_3yr=row.tr3yr,
+            return_5yr=row.tr5yr,
+            beta=row.beta,
+            alpha=row.alpha,
+            sharpe_ratio=row.sharpratio,
+            morningstar_category=row.catname if row.catname else None,
+            std3yr=row.std3yr,
+            yield_val=row.secyield
+        )
+        for row in df.rename(columns={'name': 'name_col'}).itertuples(index=False)
+    ]
+
     return funds
     
 
