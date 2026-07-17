@@ -20,6 +20,59 @@ uploaded_file = st.sidebar.file_uploader(
 
 
 @st.cache_data
+@st.cache_data
+def load_funds(file_bytes: bytes):
+    import io
+    df = pd.read_excel(io.BytesIO(file_bytes))
+
+    numeric_columns = ['expratio', 'tr1yr', 'tr3yr', 'tr5yr', 'beta', 'alpha', 'sharpratio', 'std3yr', 'secyield']
+    for col in numeric_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+
+    df['name']       = df['name'].fillna('')
+    df['ticker']     = df['ticker'].fillna('')
+    df['objname']    = df['objname'].fillna('')
+    df['catname']    = df['catname'].fillna('')
+    df['expratio']   = df['expratio'].fillna(0)
+    df['tr1yr']      = df['tr1yr'].fillna(0)
+    df['tr3yr']      = df['tr3yr'].fillna(0)
+    df['tr5yr']      = df['tr5yr'].fillna(0)
+    df['beta']       = df['beta'].fillna(1.0)
+    df['alpha']      = df['alpha'].fillna(0)
+    df['sharpratio'] = df['sharpratio'].fillna(0)
+    df['std3yr']     = df['std3yr'].fillna(0)
+    df['secyield']   = df['secyield'].fillna(0)
+
+    mask = ~(df['name'].str.endswith(' A') | df['name'].str.endswith(' C'))
+    df = df[mask].reset_index(drop=True)
+
+    funds = [
+        Fund(
+            name=row.name_col,
+            ticker=row.ticker,
+            category=row.objname,
+            expense_ratio=row.expratio,
+            return_1yr=row.tr1yr,
+            return_3yr=row.tr3yr,
+            return_5yr=row.tr5yr,
+            beta=row.beta,
+            alpha=row.alpha,
+            sharpe_ratio=row.sharpratio,
+            morningstar_category=row.catname if row.catname else None,
+            std3yr=row.std3yr,
+            yield_val=row.secyield
+        )
+        for row in df.rename(columns={'name': 'name_col'}).itertuples(index=False)
+    ]
+    return funds
+
+@st.cache_data
+def load_default_funds():
+    with open('Aspire_403b_funds.xlsx', 'rb') as f:
+        return load_funds(f.read())
+    
+
 def load_default_funds():
     with open('Aspire_403b_funds.xlsx', 'rb') as f:
         return load_funds(f.read())
