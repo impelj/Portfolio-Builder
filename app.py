@@ -18,11 +18,6 @@ uploaded_file = st.sidebar.file_uploader(
     help="Leave empty to use the default Aspire 403b fund universe"
 )
 
-@st.cache_data
-def load_funds(file_bytes: bytes):
-    import io
-    df = pd.read_excel(io.BytesIO(file_bytes))
-    # ... rest of function unchanged
 
 @st.cache_data
 def load_default_funds():
@@ -39,65 +34,9 @@ try:
 except Exception as e:
     st.error(f"Error loading Excel file: {e}")
     st.stop()
-
-def load_funds(file_bytes: bytes):
-    import io
-    df = pd.read_excel(io.BytesIO(file_bytes))
-
-    # Vectorized numeric conversion
-    numeric_columns = ['expratio', 'tr1yr', 'tr3yr', 'tr5yr', 'beta', 'alpha', 'sharpratio', 'std3yr', 'secyield']
-    for col in numeric_columns:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-
-    # Fill NaN values before bulk operations
-    df['name']       = df['name'].fillna('')
-    df['ticker']     = df['ticker'].fillna('')
-    df['objname']    = df['objname'].fillna('')
-    df['catname']    = df['catname'].fillna('')
-    df['expratio']   = df['expratio'].fillna(0)
-    df['tr1yr']      = df['tr1yr'].fillna(0)
-    df['tr3yr']      = df['tr3yr'].fillna(0)
-    df['tr5yr']      = df['tr5yr'].fillna(0)
-    df['beta']       = df['beta'].fillna(1.0)
-    df['alpha']      = df['alpha'].fillna(0)
-    df['sharpratio'] = df['sharpratio'].fillna(0)
-    df['std3yr']     = df['std3yr'].fillna(0)
-    df['secyield']   = df['secyield'].fillna(0)
-
-    # Filter A and C share classes (vectorized — no Python loop)
-    mask = ~(df['name'].str.endswith(' A') | df['name'].str.endswith(' C'))
-    df = df[mask].reset_index(drop=True)
-
-    # Build all Fund objects at once from filtered dataframe
-    funds = [
-        Fund(
-            name=row.name_col,
-            ticker=row.ticker,
-            category=row.objname,
-            expense_ratio=row.expratio,
-            return_1yr=row.tr1yr,
-            return_3yr=row.tr3yr,
-            return_5yr=row.tr5yr,
-            beta=row.beta,
-            alpha=row.alpha,
-            sharpe_ratio=row.sharpratio,
-            morningstar_category=row.catname if row.catname else None,
-            std3yr=row.std3yr,
-            yield_val=row.secyield
-        )
-        for row in df.rename(columns={'name': 'name_col'}).itertuples(index=False)
-    ]
-
-    return funds
     
 
-try:
-    funds = load_funds()
-    st.success(f"✓ Loaded {len(funds)} funds")
-except Exception as e:
-    st.error(f"Error loading Excel file: {e}")
-    st.stop()
+
 
 # Sidebar control for number of top funds
 st.sidebar.header("Portfolio Settings")
