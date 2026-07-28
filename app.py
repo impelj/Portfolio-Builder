@@ -20,7 +20,6 @@ uploaded_file = st.sidebar.file_uploader(
 
 
 @st.cache_data
-
 def load_funds(file_bytes: bytes):
     import io
     df = pd.read_excel(io.BytesIO(file_bytes))
@@ -85,9 +84,6 @@ except Exception as e:
     st.error(f"Error loading Excel file: {e}")
     st.stop()
     
-for f in funds:
-    st.write(f"{f.ticker} | cat: {f.morningstar_cat} | exp: {f.expense_ratio}")
-
 
 # Sidebar control for number of top funds
 st.sidebar.header("Portfolio Settings")
@@ -128,9 +124,7 @@ weights = {
     'expense': weight_expense / total
 }
 st.sidebar.info(f"Normalized weights:\n- Return: {weights['return']:.1%}\n- Sharpe: {weights['sharpe']:.1%}\n- Expense: {weights['expense']:.1%}")
-for f in funds:
-    if f.morningstar_cat in ['Bank Loan', 'Derivative Income']:
-        st.write(f"{f.ticker} | cat: {f.morningstar_cat} | exp: {f.expense_ratio}")
+
 # Build portfolio
 portfolio_choice = st.sidebar.selectbox(
     "Choose Portfolio",
@@ -278,6 +272,15 @@ st.download_button(
     file_name="generated_portfolio.csv",
     mime="text/csv"
 )
+st.write("=== DATA SUMMARY DEBUG ===")
+st.write(f"Total funds at this point: {len(funds)}")
+cat_list = PORTFOLIO_ALLOCATIONS[portfolio_choice]['allocations']['Other Fixed Income']['categories']
+st.write(f"Other Fixed Income categories: {cat_list}")
+for f in funds:
+    if f.morningstar_cat in ['Derivative Income', 'Bank Loan']:
+        in_list = f.morningstar_cat in cat_list
+        exp_check = f.expense_ratio > 0.0
+        st.write(f"{f.ticker}: cat='{f.morningstar_cat}' | in_list={in_list} | exp={f.expense_ratio} | exp>0={exp_check}")
 
 # Show data summary
 with st.expander("Data Summary"):
@@ -289,9 +292,8 @@ with st.expander("Data Summary"):
         category_list = allocation_info['categories']
         
         available = [
-            f for f in funds 
-            if f.morningstar_cat in category_list
-            and f.expense_ratio > 0.0
-        ]
+    f for f in funds 
+    if f.morningstar_cat in category_list
+    ]      
         
         st.write(f"  {allocation_name}: {len(available)} funds available")
