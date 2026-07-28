@@ -272,10 +272,7 @@ st.download_button(
     file_name="generated_portfolio.csv",
     mime="text/csv"
 )
-st.write("=== DATA SUMMARY DEBUG ===")
-st.write(f"Total funds at this point: {len(funds)}")
-cat_list = PORTFOLIO_ALLOCATIONS[portfolio_choice]['allocations']['Other Fixed Income']['categories']
-st.write(f"Other Fixed Income categories: {cat_list}")
+
 
 
 # Show data summary
