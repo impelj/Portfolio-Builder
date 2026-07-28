@@ -20,7 +20,7 @@ uploaded_file = st.sidebar.file_uploader(
 
 
 @st.cache_data
-@st.cache_data
+
 def load_funds(file_bytes: bytes):
     import io
     df = pd.read_excel(io.BytesIO(file_bytes))
