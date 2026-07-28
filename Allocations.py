@@ -5,7 +5,7 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.14,
-                'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Conservative Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Conservative Allocation']
             },
             'US Equity Small Cap': {
                 'pct': 0.01,
@@ -47,7 +47,7 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.20,
-                'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Moderately Conservative Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Moderately Conservative Allocation']
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
@@ -89,7 +89,7 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.25,
-                'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Moderate Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Moderate Allocation']
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
@@ -131,7 +131,7 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.35,
-                'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Moderately Aggressive Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Moderately Aggressive Allocation']
             },
             'US Equity Mid Cap': {
                 'pct': 0.10,
@@ -173,7 +173,7 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.45,
-                'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Aggressive Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Aggressive Allocation']
             },
             'US Equity Mid Cap': {
                 'pct': 0.13,
@@ -215,7 +215,7 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.46,
-                'categories': ['Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Aggressive Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Aggressive Allocation']
             },
             'US Equity Mid Cap': {
                 'pct': 0.15,
