@@ -13,7 +13,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.03,
-                'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.05,
@@ -34,7 +34,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'Other Fixed Income': {
                 'pct': 0.22,
-                'categories': ['Money Market-Tax-Free', 'Emerging Markets Bond', 'Money Market-Taxable', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
+                'categories': ['Derivative Income','Money Market-Tax-Free', 'Emerging Markets Bond', 'Money Market-Taxable', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
                                     'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
@@ -51,7 +51,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
-                'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'US Equity Small Cap': {
                 'pct': 0.03,
@@ -77,7 +77,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'Other Fixed Income': {
                 'pct': 0.10,
-                'categories': ['Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
+                'categories': ['Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
                                     'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
@@ -93,7 +93,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
-                'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'US Equity Small Cap': {
                 'pct': 0.03,
@@ -118,7 +118,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'Other Fixed Income': {
                 'pct': 0.10,
-                'categories': ['Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
+                'categories': ['Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
                                     'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
@@ -135,7 +135,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.10,
-                'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'US Equity Small Cap': {
                 'pct': 0.05,
@@ -161,7 +161,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'Other Fixed Income': {
                 'pct': 0.05,
-                'categories': ['Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
+                'categories': ['Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
                                     'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
@@ -177,7 +177,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.13,
-                'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'US Equity Small Cap': {
                 'pct': 0.07,
@@ -203,7 +203,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'Other Fixed Income': {
                 'pct': 0.01,
-                'categories': ['Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
+                'categories': ['Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
                                     'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
@@ -219,7 +219,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.15,
-                'categories': ['Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
             },
             'US Equity Small Cap': {
                 'pct': 0.075,
@@ -244,7 +244,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'Other Fixed Income': {
                 'pct': 0.0,
-                'categories': ['Money Market-Tax-Free', 'Money Market-Taxable','Emerging Markets Bond' 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
+                'categories': ['Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable','Emerging Markets Bond' 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
                                 'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
                                     'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income', 'Global Aggressive Allocation']
