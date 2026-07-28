@@ -67,10 +67,7 @@ def load_funds(file_bytes: bytes):
     ]
     return funds
 
-@st.cache_data
-def load_default_funds():
-    with open('Aspire_403b_funds.xlsx', 'rb') as f:
-        return load_funds(f.read())
+
     
 
 def load_default_funds():
