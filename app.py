@@ -127,7 +127,9 @@ weights = {
     'expense': weight_expense / total
 }
 st.sidebar.info(f"Normalized weights:\n- Return: {weights['return']:.1%}\n- Sharpe: {weights['sharpe']:.1%}\n- Expense: {weights['expense']:.1%}")
-
+for f in funds:
+    if f.morningstar_cat in ['Bank Loan', 'Derivative Income']:
+        st.write(f"{f.ticker} | cat: {f.morningstar_cat} | exp: {f.expense_ratio}")
 # Build portfolio
 portfolio_choice = st.sidebar.selectbox(
     "Choose Portfolio",
