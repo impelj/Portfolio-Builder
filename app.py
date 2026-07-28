@@ -85,7 +85,8 @@ except Exception as e:
     st.error(f"Error loading Excel file: {e}")
     st.stop()
     
-
+for f in funds:
+    st.write(f"{f.ticker} | cat: {f.morningstar_cat} | exp: {f.expense_ratio}")
 
 
 # Sidebar control for number of top funds
