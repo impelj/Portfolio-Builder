@@ -277,7 +277,7 @@ st.write(f"Total funds at this point: {len(funds)}")
 cat_list = PORTFOLIO_ALLOCATIONS[portfolio_choice]['allocations']['Other Fixed Income']['categories']
 st.write(f"Other Fixed Income categories: {cat_list}")
 
- -m 
+
 # Show data summary
 with st.expander("Data Summary"):
     st.write(f"Total funds loaded: {len(funds)}")
