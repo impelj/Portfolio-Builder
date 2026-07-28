@@ -276,12 +276,8 @@ st.write("=== DATA SUMMARY DEBUG ===")
 st.write(f"Total funds at this point: {len(funds)}")
 cat_list = PORTFOLIO_ALLOCATIONS[portfolio_choice]['allocations']['Other Fixed Income']['categories']
 st.write(f"Other Fixed Income categories: {cat_list}")
-for f in funds:
-    if f.morningstar_cat in ['Derivative Income', 'Bank Loan']:
-        in_list = f.morningstar_cat in cat_list
-        exp_check = f.expense_ratio > 0.0
-        st.write(f"{f.ticker}: cat='{f.morningstar_cat}' | in_list={in_list} | exp={f.expense_ratio} | exp>0={exp_check}")
 
+ -m 
 # Show data summary
 with st.expander("Data Summary"):
     st.write(f"Total funds loaded: {len(funds)}")
