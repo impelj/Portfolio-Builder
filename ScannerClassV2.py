@@ -101,9 +101,8 @@ class PortfolioBuilder:
             # Get funds in this allocation - use morningstar_cat, not category
             allocation_funds = [
                 f for f in self.funds
-                if f.morningstar_cat in category_list and f.expense_ratio > 0.0 # <- CHANGE THIS LINE
-            ]
-            
+                if f.morningstar_cat in category_list
+                ]
             # Score and sort
             for fund in allocation_funds:
                 fund.calculate_score_growth_focused(weights=weights)
