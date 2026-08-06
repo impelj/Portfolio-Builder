@@ -93,15 +93,15 @@ st.sidebar.markdown(f'Change weighting of scoring factors:')
 if 'weight_return' not in st.session_state:
     st.session_state.weight_return = 50
 if 'weight_sharpe' not in st.session_state:
-    st.session_state.weight_sharpe = 5
+    st.session_state.weight_sharpe = 10
 if 'weight_expense' not in st.session_state:
-    st.session_state.weight_expense = 45
+    st.session_state.weight_expense = 40
 
 # Reset button
 def reset_weights():
     st.session_state.weight_return = 50
-    st.session_state.weight_sharpe = 5
-    st.session_state.weight_expense = 45
+    st.session_state.weight_sharpe = 10
+    st.session_state.weight_expense = 40
 
 
 weight_return = st.sidebar.slider("Weight for 5-year return", 0, 100, key='weight_return', step=5)
@@ -217,13 +217,13 @@ if st.button("Generate PDF Report"):
         st.error("Please enter a client name before generating the report.")
     else:
         with st.spinner("Generating PDF..."):
-            option_label = f"{portfolio_choice} - Option {option_choice}"
             pdf_buffer = build_portfolio_report(
                 portfolio=portfolio,
                 allocations=builder.allocations,
                 client_name=client_name,
-                portfolio_name=option_label,
-                investment_amount=investment_amount
+                portfolio_name=portfolio_choice,
+                investment_amount=investment_amount,
+                option_number=option_choice
             )
 
         st.download_button(

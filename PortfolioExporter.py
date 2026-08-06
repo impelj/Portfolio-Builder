@@ -206,7 +206,8 @@ def build_portfolio_report(
     allocations: dict,
     client_name: str,
     portfolio_name: str,
-    investment_amount: float
+    investment_amount: float,
+    option_number: int = None
 ) -> BytesIO:
     """
     Build a professional PDF portfolio report.
@@ -286,7 +287,8 @@ def build_portfolio_report(
                 ParagraphStyle('Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold')
             ),
             Paragraph(
-                f'Prepared For: <b>{client_name}</b><br/>'
+                (f'<b>OPTION {option_number}</b><br/>' if option_number else '')
+                + f'Prepared For: <b>{client_name}</b><br/>'
                 f'Date: {today}<br/>'
                 f'Investment Amount: <b>${investment_amount:,.2f}</b>',
                 header_style
