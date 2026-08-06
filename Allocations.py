@@ -5,15 +5,15 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.14,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Conservative Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value','Conservative Allocation', 'Equity Energy']
             },
             'US Equity Small Cap': {
                 'pct': 0.01,
-                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Small Company']
+                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Small Company', 'Natural Resources']
             },
             'US Equity Mid Cap': {
                 'pct': 0.03,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.05,
@@ -47,15 +47,15 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.20,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value','Moderately Conservative Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value','Moderately Conservative Allocation', 'Equity Energy']
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income','Equity-Income','Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.03,
-                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth']
+                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Natural Resources']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.09,
@@ -89,15 +89,15 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.25,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Moderate Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Moderate Allocation', 'Equity Energy']
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income','Equity-Income','Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.03,
-                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth']
+                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Natural Resources']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.10,
@@ -131,15 +131,15 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.35,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Moderately Aggressive Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Moderately Aggressive Allocation', 'Equity Energy']
             },
             'US Equity Mid Cap': {
                 'pct': 0.10,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.05,
-                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth']
+                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Natural Resources']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.12,
@@ -173,15 +173,15 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.45,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Aggressive Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Aggressive Allocation', 'Equity Energy']
             },
             'US Equity Mid Cap': {
                 'pct': 0.13,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.07,
-                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth']
+                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Natural Resources']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.15,
@@ -215,15 +215,15 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.46,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Equity-Income', 'Growth and Income', 'Large Value', 'Aggressive Allocation']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Aggressive Allocation', 'Equity Energy']
             },
             'US Equity Mid Cap': {
                 'pct': 0.15,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth']
+                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.075,
-                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth']
+                'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Natural Resources']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.20,
