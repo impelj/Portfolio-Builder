@@ -7,7 +7,7 @@ from PortfolioExporter import build_portfolio_report
 
 st.set_page_config(page_title="Portfolio Builder", layout="wide")
 
-st.title("403b Portfolio Builder")
+st.title("Portfolio Builder")
 st.markdown("Selects top funds for each allocation category in each model portfolio.")
 st.subheader("How it works:")
 st.markdown(''' Funds are scored based on a combination of 5-year return, Sharpe Ratio and expense ratio to determine a cumlative scoring guideline for ranking funds within each allocation category. The scores are weighed most heavily on 5-year return counting for 60% of the score, followed by Sharpe at 25% and Expense Ratio at 15%.''')
