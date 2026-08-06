@@ -47,7 +47,8 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.20,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value','Moderately Conservative Allocation', 'Equity Energy']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value','Moderately Conservative Allocation', 'Equity Energy', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
+                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+']
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
@@ -88,7 +89,8 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.25,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Moderate Allocation', 'Equity Energy']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Moderate Allocation', 'Equity Energy', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
+                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+']
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
@@ -119,8 +121,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'pct': 0.10,
                 'categories': ['Bank Loan','Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
-                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
-                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
+                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Intermediate Government', 'Miscellaneous Fixed Income']
             }
         }
     },                               
@@ -130,7 +131,8 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.35,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Moderately Aggressive Allocation', 'Equity Energy']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Moderately Aggressive Allocation', 'Equity Energy', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
+                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+']
             },
             'US Equity Mid Cap': {
                 'pct': 0.10,
@@ -162,8 +164,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'pct': 0.05,
                 'categories': ['Bank Loan','Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
-                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
-                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
+                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Intermediate Government', 'Miscellaneous Fixed Income']
             }
         }
     },
@@ -172,7 +173,8 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.45,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Aggressive Allocation', 'Equity Energy']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Aggressive Allocation', 'Equity Energy', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
+                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+']
             },
             'US Equity Mid Cap': {
                 'pct': 0.13,
@@ -204,8 +206,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'pct': 0.01,
                 'categories': ['Bank Loan','Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable', 'Emerging Markets Bond', 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
-                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
-                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income']
+                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Intermediate Government', 'Miscellaneous Fixed Income']
             }
         }
     },
@@ -214,7 +215,8 @@ PORTFOLIO_ALLOCATIONS = {
         'allocations': {
             'US Equity Large Cap': {
                 'pct': 0.46,
-                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Aggressive Allocation', 'Equity Energy']
+                'categories': ['Large Growth','Large Value', 'Large Blend', 'Large Value', 'Aggressive Allocation', 'Equity Energy', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
+                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+']
             },
             'US Equity Mid Cap': {
                 'pct': 0.15,
@@ -245,8 +247,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'pct': 0.0,
                 'categories': ['Bank Loan','Derivative Income','Money Market-Tax-Free', 'Money Market-Taxable','Emerging Markets Bond' 'Global Bond - USD Hedged', 'Global Bond', 'High Yield Bond','Inflation-Protected Bond','Long-Term Bond',\
                                'Intermediate Core Bond','Intermediate Core-Plus Bond','Government Mortgage-Backed Bond','Multisector Bond','Nontraditional Bond','Prime Money Market',\
-                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Target-Date 2000-2010', 'Target-Date 2015', 'Target-Date 2020', 'Target-Date 2025', 'Target-Date 2030', 'Target-Date 2035', 'Target-Date 2040', 'Target-Date 2045',\
-                                    'Target-Date 2050', 'Target-Date 2055', 'Target-Date 2060', 'Target-Date 2065+', 'Intermediate Government', 'Miscellaneous Fixed Income', 'Global Aggressive Allocation']
+                                'Securitized Bond - Focused','Securitized Bond - Diversified', 'Intermediate Government', 'Miscellaneous Fixed Income', 'Global Aggressive Allocation']
             }
         }
     },
