@@ -115,6 +115,40 @@ class PortfolioBuilder:
     
         return self.portfolio
     
+    def build_portfolio_options(self, top_n: int = 5, weights=None, num_options: int = 2) -> Dict[int, Dict[str, List[Fund]]]:
+        """
+        Build multiple non-overlapping portfolio options per allocation bucket.
+        Option 1 = ranks 1..top_n, Option 2 = ranks top_n+1..2*top_n, etc.
+        If a bucket runs out of unique funds for a later option, it reuses
+        funds from the top of the ranked list to fill the slot.
+        Returns dict: {option_number: {allocation_name: [Fund, ...]}}
+        """
+        options = {i: {} for i in range(1, num_options + 1)}
+
+        for allocation_name, allocation_info in self.allocations.items():
+            category_list = allocation_info['categories']
+
+            allocation_funds = [
+                f for f in self.funds
+                if f.morningstar_cat in category_list
+            ]
+            for fund in allocation_funds:
+                fund.calculate_score_growth_focused(weights=weights)
+            allocation_funds.sort(key=lambda f: f.score, reverse=True)
+
+            for i in range(1, num_options + 1):
+                start = (i - 1) * top_n
+                end = start + top_n
+                tranche = allocation_funds[start:end]
+
+                if len(tranche) < top_n and allocation_funds:
+                    needed = top_n - len(tranche)
+                    tranche = tranche + allocation_funds[:needed]
+
+                options[i][allocation_name] = tranche
+
+        return options
+
     def portfolio_to_dataframe(self) -> pd.DataFrame:
         """Convert portfolio to DataFrame for display"""
         rows = []
@@ -135,4 +169,3 @@ class PortfolioBuilder:
                 })
         
         return pd.DataFrame(rows)
-        

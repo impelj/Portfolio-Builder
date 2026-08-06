@@ -131,11 +131,19 @@ portfolio_choice = st.sidebar.selectbox(
     list(PORTFOLIO_ALLOCATIONS.keys())
 )
 builder = PortfolioBuilder(funds, portfolio_name=portfolio_choice)
-portfolio = builder.build_portfolio(top_n=top_n, weights=weights)
+portfolio_options = builder.build_portfolio_options(top_n=top_n, weights=weights, num_options=2)
+
+option_choice = st.sidebar.radio(
+    "Portfolio Option",
+    options=[1, 2],
+    format_func=lambda i: f"Option {i} — {'Top Picks' if i == 1 else 'Alternate Picks'}"
+)
+portfolio = portfolio_options[option_choice]
+builder.portfolio = portfolio  # keep portfolio_to_dataframe() in sync with selected option
 
 # Display portfolio
 st.markdown("---")
-st.subheader(f"{portfolio_choice} Portfolio Allocation")
+st.subheader(f"{portfolio_choice} Portfolio Allocation — Option {option_choice}")
 
 
 
@@ -208,18 +216,19 @@ if st.button("Generate PDF Report"):
         st.error("Please enter a client name before generating the report.")
     else:
         with st.spinner("Generating PDF..."):
+            option_label = f"{portfolio_choice} - Option {option_choice}"
             pdf_buffer = build_portfolio_report(
                 portfolio=portfolio,
                 allocations=builder.allocations,
                 client_name=client_name,
-                portfolio_name=portfolio_choice,
+                portfolio_name=option_label,
                 investment_amount=investment_amount
             )
 
         st.download_button(
             label="📥 Download PDF Report",
             data=pdf_buffer,
-            file_name=f"{client_name.replace(' ', '_')}_{portfolio_choice}_Portfolio.pdf",
+            file_name=f"{client_name.replace(' ', '_')}_{portfolio_choice}_Option{option_choice}_Portfolio.pdf",
             mime="application/pdf"
         )
 
@@ -269,7 +278,7 @@ csv = portfolio_df.to_csv(index=False)
 st.download_button(
     label="📥 Download Portfolio",
     data=csv,
-    file_name="generated_portfolio.csv",
+    file_name=f"generated_portfolio_option{option_choice}.csv",
     mime="text/csv"
 )
 
