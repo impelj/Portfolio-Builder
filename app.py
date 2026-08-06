@@ -93,15 +93,15 @@ st.sidebar.markdown(f'Change weighting of scoring factors:')
 if 'weight_return' not in st.session_state:
     st.session_state.weight_return = 50
 if 'weight_sharpe' not in st.session_state:
-    st.session_state.weight_sharpe = 10
+    st.session_state.weight_sharpe = 5
 if 'weight_expense' not in st.session_state:
-    st.session_state.weight_expense = 40
+    st.session_state.weight_expense = 45
 
 # Reset button
 def reset_weights():
     st.session_state.weight_return = 50
-    st.session_state.weight_sharpe = 10
-    st.session_state.weight_expense = 40
+    st.session_state.weight_sharpe = 5
+    st.session_state.weight_expense = 45
 
 
 weight_return = st.sidebar.slider("Weight for 5-year return", 0, 100, key='weight_return', step=5)
@@ -131,12 +131,13 @@ portfolio_choice = st.sidebar.selectbox(
     list(PORTFOLIO_ALLOCATIONS.keys())
 )
 builder = PortfolioBuilder(funds, portfolio_name=portfolio_choice)
-portfolio_options = builder.build_portfolio_options(top_n=top_n, weights=weights, num_options=2)
+portfolio_options = builder.build_portfolio_options(top_n=top_n, weights=weights, num_options=3)
 
+option_labels = {1: 'Top Picks', 2: 'Alternate Picks', 3: 'Third Picks'}
 option_choice = st.sidebar.radio(
     "Portfolio Option",
-    options=[1, 2],
-    format_func=lambda i: f"Option {i} — {'Top Picks' if i == 1 else 'Alternate Picks'}"
+    options=[1, 2, 3],
+    format_func=lambda i: f"Option {i} — {option_labels[i]}"
 )
 portfolio = portfolio_options[option_choice]
 builder.portfolio = portfolio  # keep portfolio_to_dataframe() in sync with selected option
