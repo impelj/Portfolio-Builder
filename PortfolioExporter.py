@@ -680,4 +680,4 @@ def build_portfolio_report(
 
     doc.build(story)
     buffer.seek(0)
-    return buffer
+    return buffer 

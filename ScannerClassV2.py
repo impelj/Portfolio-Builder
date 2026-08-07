@@ -181,4 +181,4 @@ class PortfolioBuilder:
                     'Score': f"{fund.score:.3f}"
                 })
         
-        return pd.DataFrame(rows)
+        return pd.DataFrame(rows) 

@@ -300,7 +300,7 @@ st.download_button(
 
 
 
-# Show data summary
+# Show data summary 
 with st.expander("Data Summary"):
     st.write(f"Total funds loaded: {len(funds)}")
     st.write(f"Funds with Sharpe Ratio data: {sum(1 for f in funds if f.sharpe_ratio > 0)}")
