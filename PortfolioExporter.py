@@ -35,6 +35,38 @@ def get_num_funds(allocation_pct: float) -> int:
         return 3
 
 
+def apply_risk_prm_cap(rows, allocations, name_substring=' Risk Prm', cap_pct=0.03):
+    """
+    Caps any fund whose name contains `name_substring` (e.g. reinsurance
+    risk premia funds like "Stone Ridge Hi Yld Reinsurance Risk Prml") at
+    cap_pct of the whole portfolio (default 3%). Excess is redistributed
+    proportionally to all other funds not matching the name filter.
+
+    rows: list of (fund, pct, allocation_name) tuples, pct as a fraction (0-1).
+    Returns a new list of (fund, pct, allocation_name) tuples.
+    """
+    rows = [list(r) for r in rows]  # mutable copies
+    total_excess = 0.0
+
+    for row in rows:
+        fund = row[0]
+        if name_substring in fund.name and row[1] > cap_pct:
+            total_excess += row[1] - cap_pct
+            row[1] = cap_pct
+
+    if total_excess > 0:
+        eligible = [row for row in rows if name_substring not in row[0].name]
+        eligible_total = sum(row[1] for row in eligible)
+
+        if eligible_total > 0:
+            for row in eligible:
+                row[1] += total_excess * (row[1] / eligible_total)
+        # else: no eligible funds to absorb excess; portfolio will fall
+        # short of 100%. Rare edge case.
+
+    return [tuple(r) for r in rows]
+
+
 def apply_sector_cap(rows, max_pct=0.20, max_iterations=10):
     """
     Cap total portfolio exposure to any single asset class (fund.morningstar_cat)
@@ -92,6 +124,8 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     """
     Build fund rows with score-weighted allocations.
     Fixes the total % bug by normalizing to exactly 100%.
+    Caps "Risk Prm" (reinsurance risk premia) funds at 3% of the whole
+    portfolio, redistributing excess elsewhere.
     Enforces a max_sector_pct cap per asset class (fund.morningstar_cat),
     redistributing any excess to other funds.
     Returns list of (fund, fund_pct, allocation_name) tuples.
@@ -128,6 +162,9 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     if raw_total > 0:
         scale = expected_total / raw_total
         rows = [(fund, pct * scale, name) for fund, pct, name in rows]
+
+    # Cap reinsurance "Risk Prm" funds at 2.5% of Short-term Fixed Income's target
+    rows = apply_risk_prm_cap(rows, allocations)
 
     # Enforce sector concentration cap
     rows = apply_sector_cap(rows, max_pct=max_sector_pct)

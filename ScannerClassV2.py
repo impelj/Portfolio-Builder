@@ -34,7 +34,7 @@ class Fund:
         - 15% inverse of expense ratio (lower costs are better)
         """
         if weights is None:
-            weights = {'return': 0.50, 'sharpe': 0.15, 'expense': 0.35}
+            weights = {'return': 0.50, 'sharpe': 0.05, 'expense': 0.45}
         
         # Normalize to 0-1 range
         # 5-year return: 50% is perfect score
@@ -89,7 +89,7 @@ class PortfolioBuilder:
         self.portfolio = {}
 
     
-    def build_portfolio(self, top_n: int = 5, weights=None) -> Dict[str, List[Fund]]:
+    def build_portfolio(self, top_n: int = , weights=None) -> Dict[str, List[Fund]]:
         """
         Build portfolio by selecting top N funds per allocation bucket
         Returns dict of allocation -> [top funds]
