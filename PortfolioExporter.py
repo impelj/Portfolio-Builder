@@ -7,6 +7,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from io import BytesIO
 from datetime import date
 from collections import defaultdict
+import re
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -19,6 +20,49 @@ MID_BLUE = colors.HexColor('#336699')
 WHITE = colors.white
 LIGHT_GRAY = colors.HexColor('#F5F5F5')
 DARK_GRAY = colors.HexColor('#333333')
+
+SHARE_CLASS_SUFFIXES = {
+    'a', 'b', 'c', 'i', 'k', 'n', 'p', 'r', 's', 't', 'w', 'x', 'y', 'z',
+    'adm', 'admiral', 'inv', 'investor', 'instl', 'institutional', 'inst',
+    'retail', 'retirement', 'service', 'signal', 'direct', 'advisor',
+    'r1', 'r2', 'r3', 'r4', 'r5', 'r6',
+    'k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'k8',
+    'y1', 'y2', 'y3', 'y4', 'y5', 'y6',
+    'shares', 'class',
+}
+
+
+def normalize_fund_family(name):
+    """
+    Strip trailing share-class tokens from a fund name to get a base
+    "fund family" key, so share classes of the same underlying strategy
+    (e.g. "Invesco Energy R6" vs "Invesco Energy R5", or "Vanguard Energy
+    Adm" vs "Vanguard Energy Inv") are recognized as the same fund.
+
+    This is a heuristic based on common share-class naming conventions,
+    not a real fund-family identifier -- but it's conservative: it only
+    strips tokens from a known suffix list, so genuinely different funds
+    stay distinct. E.g. "Fidelity Advisor Energy - Z" strips its trailing
+    "Z" to "fidelity advisor energy", while "Fidelity Select Energy
+    Portfolio" has no recognized suffix to strip and stays as-is -- the
+    two remain distinct rather than being merged.
+    """
+    if not name:
+        return name
+
+    cleaned = re.sub(r'\s*-\s*', ' ', name.strip())
+    tokens = cleaned.split()
+
+    while tokens:
+        last = tokens[-1].lower().strip(',.')
+        if last in SHARE_CLASS_SUFFIXES:
+            tokens.pop()
+        else:
+            break
+
+    base = ' '.join(tokens).strip().lower()
+    return base if base else name.strip().lower()
+
 
 def get_num_funds(allocation_pct: float) -> int:
     """
@@ -39,7 +83,10 @@ def select_diversified_funds(tranche_candidates, allocation_pct, num_funds, max_
     """
     Greedily select up to num_funds funds, preferring funds whose category
     won't push that category's score-weighted share over max_sector_pct of
-    the WHOLE portfolio (not just this bucket).
+    the WHOLE portfolio (not just this bucket). Never selects two funds
+    that are just different share classes of the same underlying fund
+    (see normalize_fund_family) -- that constraint is hard and is never
+    relaxed, unlike the sector cap which can be exceeded as a last resort.
 
     tranche_candidates: this option's own ranked candidate list (highest
         score first) -- tried first, so Option 1/2/3 keep giving genuinely
@@ -52,22 +99,33 @@ def select_diversified_funds(tranche_candidates, allocation_pct, num_funds, max_
         that specific violation, not a way to add extra diversity beyond
         what's needed.
 
-    At each slot: try the tranche first, picking the first ranked
-    candidate that keeps its category under the cap (projecting the
-    score-weighted split as if only the funds chosen so far, plus this
-    candidate, were selected). If nothing in the tranche works, try the
-    full pool the same way. If nothing anywhere avoids the cap, fall back
-    to the tranche's next-best fund regardless of category -- the bucket
-    is allowed to exceed the cap rather than force in an unrelated fund
-    just to fill the slot.
+    At each slot: try the tranche first, picking the first ranked,
+    non-duplicate-family candidate that keeps its category under the cap
+    (projecting the score-weighted split as if only the funds chosen so
+    far, plus this candidate, were selected). If nothing in the tranche
+    works, try the full pool the same way. If nothing anywhere avoids the
+    cap, fall back to the next best fund regardless of category -- but
+    still never a duplicate family -- since the bucket is allowed to
+    exceed the sector cap rather than force in an unrelated fund just to
+    fill the slot.
 
     Returns the selected funds in the order chosen.
     """
     if not tranche_candidates:
         return []
 
-    def first_non_violating(pool, selected):
+    def is_duplicate_family(candidate, selected):
+        candidate_family = normalize_fund_family(candidate.name)
+        return any(normalize_fund_family(f.name) == candidate_family for f in selected)
+
+    def first_valid(pool, selected, enforce_cap):
         for candidate in pool:
+            if is_duplicate_family(candidate, selected):
+                continue
+
+            if not enforce_cap:
+                return candidate
+
             trial = selected + [candidate]
             total_score = sum(f.score for f in trial if f.score)
 
@@ -92,24 +150,26 @@ def select_diversified_funds(tranche_candidates, allocation_pct, num_funds, max_
 
     while len(selected) < num_funds and (remaining or fallback_pool):
         # 1. Try this option's own tranche first (keeps options distinct)
-        chosen = first_non_violating(remaining, selected)
+        chosen = first_valid(remaining, selected, enforce_cap=True)
         source_list = remaining
 
         # 2. Tranche can't diversify this slot -- reach into the full pool
         if chosen is None and fallback_pool:
-            chosen = first_non_violating(fallback_pool, selected)
+            chosen = first_valid(fallback_pool, selected, enforce_cap=True)
             source_list = fallback_pool
 
-        # 3. Nothing anywhere avoids the cap -- accept the violation
+        # 3. Nothing anywhere avoids the cap -- accept the cap violation,
+        # but still never a duplicate family
         if chosen is None:
-            if remaining:
-                chosen = remaining[0]
-                source_list = remaining
-            elif fallback_pool:
-                chosen = fallback_pool[0]
+            chosen = first_valid(remaining, selected, enforce_cap=False)
+            source_list = remaining
+            if chosen is None and fallback_pool:
+                chosen = first_valid(fallback_pool, selected, enforce_cap=False)
                 source_list = fallback_pool
-            else:
-                break
+
+        # 4. Truly nothing left (everything remaining is a duplicate family)
+        if chosen is None:
+            break
 
         selected.append(chosen)
         source_list.remove(chosen)
@@ -591,7 +651,7 @@ def build_portfolio_report(
 
     col_headers = [
         'Symbol', 'Allocation\n%', 'Volatility', 'Name',
-        'Asset Class', 'Expense\nRatio', 'Yield', '3 YR Total\nReturn'
+        'Asset Class', 'Expense\nRatio', 'Yield', '1 YR Total\nReturn'
     ]
     col_widths = [
         0.55*inch, 0.85*inch, 0.65*inch, 1.8*inch,
@@ -614,7 +674,7 @@ def build_portfolio_report(
             yield_display = '0.00%'
 
         # Total return
-        total_return = f"{fund.return_3yr * 100:.2f}%" if fund.return_3yr else '0.00%'
+        total_return = f"{fund.return_1yr * 100:.2f}%" if fund.return_1yr else '0.00%'
 
         row = [
             Paragraph(ticker, center_cell_style),
@@ -680,4 +740,4 @@ def build_portfolio_report(
 
     doc.build(story)
     buffer.seek(0)
-    return buffer 
+    return buffer
