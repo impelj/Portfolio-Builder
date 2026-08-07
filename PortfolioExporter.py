@@ -35,10 +35,65 @@ def get_num_funds(allocation_pct: float) -> int:
         return 3
 
 
-def build_portfolio_rows(portfolio, allocations):
+def apply_sector_cap(rows, max_pct=0.20, max_iterations=10):
+    """
+    Cap total portfolio exposure to any single asset class (fund.morningstar_cat)
+    at max_pct of the whole portfolio. Excess weight is redistributed
+    proportionally across funds outside capped categories.
+
+    Iterative because redistributing excess into other funds can push a
+    second category over the cap, which then needs its own pass.
+
+    rows: list of (fund, pct, allocation_name) tuples, pct as a fraction (0-1).
+    Returns a new list of (fund, pct, allocation_name) tuples.
+    """
+    rows = [list(r) for r in rows]  # mutable copies
+    permanently_capped = set()
+
+    def sector_of(fund):
+        return fund.morningstar_cat or 'Uncategorized'
+
+    for _ in range(max_iterations):
+        sector_totals = defaultdict(float)
+        for fund, pct, _ in rows:
+            sector_totals[sector_of(fund)] += pct
+
+        over_cap = {
+            s: t for s, t in sector_totals.items()
+            if t > max_pct and s not in permanently_capped
+        }
+        if not over_cap:
+            break
+
+        total_excess = 0.0
+        for sector, total in over_cap.items():
+            excess = total - max_pct
+            total_excess += excess
+            scale = max_pct / total if total > 0 else 0
+            for row in rows:
+                if sector_of(row[0]) == sector:
+                    row[1] *= scale
+            permanently_capped.add(sector)
+
+        # Redistribute excess proportionally among rows not in a capped sector
+        eligible = [row for row in rows if sector_of(row[0]) not in permanently_capped]
+        eligible_total = sum(row[1] for row in eligible)
+
+        if eligible_total > 0:
+            for row in eligible:
+                row[1] += total_excess * (row[1] / eligible_total)
+        # else: nothing left to absorb the excess — portfolio will fall
+        # short of 100%. Rare edge case (nearly every bucket is capped).
+
+    return [tuple(r) for r in rows]
+
+
+def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     """
     Build fund rows with score-weighted allocations.
     Fixes the total % bug by normalizing to exactly 100%.
+    Enforces a max_sector_pct cap per asset class (fund.morningstar_cat),
+    redistributing any excess to other funds.
     Returns list of (fund, fund_pct, allocation_name) tuples.
     """
     rows = []
@@ -73,6 +128,9 @@ def build_portfolio_rows(portfolio, allocations):
     if raw_total > 0:
         scale = expected_total / raw_total
         rows = [(fund, pct * scale, name) for fund, pct, name in rows]
+
+    # Enforce sector concentration cap
+    rows = apply_sector_cap(rows, max_pct=max_sector_pct)
 
     # Round allocations and fix rounding errors
     rounded = [(fund, round(pct * 100), name) for fund, pct, name in rows]
@@ -208,7 +266,8 @@ def build_portfolio_report(
     portfolio_name: str,
     investment_amount: float,
     option_number: int = None,
-    fund_source: str = "403b Funds"
+    fund_source: str = "403b Funds",
+    max_sector_pct: float = 0.20
 ) -> BytesIO:
     """
     Build a professional PDF portfolio report.
@@ -311,7 +370,7 @@ def build_portfolio_report(
 
     # --- Pie Chart ---
     # --- Build rows first (needed for everything below) ---
-    rows = build_portfolio_rows(portfolio, allocations)
+    rows = build_portfolio_rows(portfolio, allocations, max_sector_pct=max_sector_pct)
     asset_summary = build_asset_class_summary(rows)
 
     # --- Asset Class Summary Table + Pie Chart (side by side) ---
