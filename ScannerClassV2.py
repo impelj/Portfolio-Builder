@@ -89,7 +89,7 @@ class PortfolioBuilder:
         self.portfolio = {}
 
     
-    def build_portfolio(self, top_n: int = , weights=None) -> Dict[str, List[Fund]]:
+    def build_portfolio(self, top_n: int = 5, weights=None) -> Dict[str, List[Fund]]:
         """
         Build portfolio by selecting top N funds per allocation bucket
         Returns dict of allocation -> [top funds]
