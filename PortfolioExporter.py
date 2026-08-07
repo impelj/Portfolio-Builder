@@ -67,11 +67,20 @@ def apply_risk_prm_cap(rows, allocations, name_substring=' Risk Prm', cap_pct=0.
     return [tuple(r) for r in rows]
 
 
-def apply_sector_cap(rows, max_pct=0.20, max_iterations=10):
+FIXED_INCOME_BUCKETS = {'Short-term Fixed Income', 'Other Fixed Income'}
+
+
+def apply_sector_cap(rows, max_pct=0.20, max_iterations=10, excluded_allocations=None):
     """
     Cap total portfolio exposure to any single asset class (fund.morningstar_cat)
     at max_pct of the whole portfolio. Excess weight is redistributed
     proportionally across funds outside capped categories.
+
+    Rows whose allocation_name is in excluded_allocations are left untouched
+    entirely -- they don't count toward any sector total, aren't capped, and
+    never receive redistributed excess. This keeps fixed-income sleeves (which
+    are legitimately meant to be concentrated, e.g. 40% Ultrashort Bond by
+    design) from being dragged toward the equity-sector cap.
 
     Iterative because redistributing excess into other funds can push a
     second category over the cap, which then needs its own pass.
@@ -79,15 +88,19 @@ def apply_sector_cap(rows, max_pct=0.20, max_iterations=10):
     rows: list of (fund, pct, allocation_name) tuples, pct as a fraction (0-1).
     Returns a new list of (fund, pct, allocation_name) tuples.
     """
+    excluded_allocations = excluded_allocations or set()
     rows = [list(r) for r in rows]  # mutable copies
     permanently_capped = set()
 
     def sector_of(fund):
         return fund.morningstar_cat or 'Uncategorized'
 
+    eligible_indices = [i for i, row in enumerate(rows) if row[2] not in excluded_allocations]
+
     for _ in range(max_iterations):
         sector_totals = defaultdict(float)
-        for fund, pct, _ in rows:
+        for i in eligible_indices:
+            fund, pct, _ = rows[i]
             sector_totals[sector_of(fund)] += pct
 
         over_cap = {
@@ -102,20 +115,22 @@ def apply_sector_cap(rows, max_pct=0.20, max_iterations=10):
             excess = total - max_pct
             total_excess += excess
             scale = max_pct / total if total > 0 else 0
-            for row in rows:
-                if sector_of(row[0]) == sector:
-                    row[1] *= scale
+            for i in eligible_indices:
+                if sector_of(rows[i][0]) == sector:
+                    rows[i][1] *= scale
             permanently_capped.add(sector)
 
-        # Redistribute excess proportionally among rows not in a capped sector
-        eligible = [row for row in rows if sector_of(row[0]) not in permanently_capped]
-        eligible_total = sum(row[1] for row in eligible)
+        # Redistribute excess proportionally among eligible rows not in a capped sector
+        redistribute_indices = [
+            i for i in eligible_indices if sector_of(rows[i][0]) not in permanently_capped
+        ]
+        redistribute_total = sum(rows[i][1] for i in redistribute_indices)
 
-        if eligible_total > 0:
-            for row in eligible:
-                row[1] += total_excess * (row[1] / eligible_total)
+        if redistribute_total > 0:
+            for i in redistribute_indices:
+                rows[i][1] += total_excess * (rows[i][1] / redistribute_total)
         # else: nothing left to absorb the excess — portfolio will fall
-        # short of 100%. Rare edge case (nearly every bucket is capped).
+        # short of 100%. Rare edge case (nearly every eligible bucket is capped).
 
     return [tuple(r) for r in rows]
 
@@ -126,8 +141,9 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     Fixes the total % bug by normalizing to exactly 100%.
     Caps "Risk Prm" (reinsurance risk premia) funds at 3% of the whole
     portfolio, redistributing excess elsewhere.
-    Enforces a max_sector_pct cap per asset class (fund.morningstar_cat),
-    redistributing any excess to other funds.
+    Enforces a max_sector_pct cap per asset class (fund.morningstar_cat)
+    within equity buckets only, redistributing any excess to other equity
+    funds. Short-term Fixed Income and Other Fixed Income are exempt.
     Returns list of (fund, fund_pct, allocation_name) tuples.
     """
     rows = []
@@ -166,8 +182,9 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     # Cap reinsurance "Risk Prm" funds at 2.5% of Short-term Fixed Income's target
     rows = apply_risk_prm_cap(rows, allocations)
 
-    # Enforce sector concentration cap
-    rows = apply_sector_cap(rows, max_pct=max_sector_pct)
+    # Enforce sector concentration cap (equity buckets only -- fixed income
+    # sleeves are legitimately meant to be concentrated by design)
+    rows = apply_sector_cap(rows, max_pct=max_sector_pct, excluded_allocations=FIXED_INCOME_BUCKETS)
 
     # Round allocations and fix rounding errors
     rounded = [(fund, round(pct * 100), name) for fund, pct, name in rows]
@@ -465,7 +482,7 @@ def build_portfolio_report(
 
     col_headers = [
         'Symbol', 'Allocation\n%', 'Volatility', 'Name',
-        'Asset Class', 'Expense\nRatio', 'Yield', '1 YR Total\nReturn'
+        'Asset Class', 'Expense\nRatio', 'Yield', '3 YR Total\nReturn'
     ]
     col_widths = [
         0.55*inch, 0.85*inch, 0.65*inch, 1.8*inch,
