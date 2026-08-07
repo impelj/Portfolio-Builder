@@ -34,7 +34,7 @@ class Fund:
         - 15% inverse of expense ratio (lower costs are better)
         """
         if weights is None:
-            weights = {'return': 0.50, 'sharpe': 0.05, 'expense': 0.45}
+            weights = {'return': 0.50, 'sharpe': 0.15, 'expense': 0.35}
         
         # Normalize to 0-1 range
         # 5-year return: 50% is perfect score
@@ -121,9 +121,20 @@ class PortfolioBuilder:
         Option 1 = ranks 1..top_n, Option 2 = ranks top_n+1..2*top_n, etc.
         If a bucket runs out of unique funds for a later option, it reuses
         funds from the top of the ranked list to fill the slot.
+
+        Also stores self.full_ranked_funds: {allocation_name: [Fund, ...]},
+        the COMPLETE ranked (highest score first) list of every eligible
+        fund for that bucket, not sliced into tranches. PortfolioExporter
+        uses this as a fallback pool when an option's own tranche can't
+        diversify a bucket (e.g. every candidate in the tranche shares the
+        same over-cap category) -- it reaches into the full pool only to
+        break that specific violation, so Option 1/2/3 still differ from
+        each other in the normal case.
+
         Returns dict: {option_number: {allocation_name: [Fund, ...]}}
         """
         options = {i: {} for i in range(1, num_options + 1)}
+        self.full_ranked_funds = {}
 
         for allocation_name, allocation_info in self.allocations.items():
             category_list = allocation_info['categories']
@@ -135,6 +146,8 @@ class PortfolioBuilder:
             for fund in allocation_funds:
                 fund.calculate_score_growth_focused(weights=weights)
             allocation_funds.sort(key=lambda f: f.score, reverse=True)
+
+            self.full_ranked_funds[allocation_name] = allocation_funds
 
             for i in range(1, num_options + 1):
                 start = (i - 1) * top_n

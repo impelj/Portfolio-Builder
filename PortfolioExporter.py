@@ -35,34 +35,39 @@ def get_num_funds(allocation_pct: float) -> int:
         return 3
 
 
-def select_diversified_funds(funds_list, allocation_pct, num_funds, max_sector_pct=0.20):
+def select_diversified_funds(tranche_candidates, allocation_pct, num_funds, max_sector_pct=0.20, full_candidates=None):
     """
-    Greedily select up to num_funds funds from a ranked (highest score first)
-    candidate list, preferring funds whose category won't push that
-    category's score-weighted share over max_sector_pct of the WHOLE
-    portfolio (not just this bucket).
+    Greedily select up to num_funds funds, preferring funds whose category
+    won't push that category's score-weighted share over max_sector_pct of
+    the WHOLE portfolio (not just this bucket).
 
-    At each slot, walks the remaining ranked candidates in order and picks
-    the first one that keeps its category under the cap, projecting the
-    score-weighted split as if only the funds chosen so far (plus this
-    candidate) were selected. If every remaining candidate would violate
-    the cap (e.g. the whole category list for this bucket is one sector),
-    falls back to the next best-ranked fund regardless of category --
-    the bucket is allowed to exceed the cap rather than force in an
-    unrelated fund just to fill the slot.
+    tranche_candidates: this option's own ranked candidate list (highest
+        score first) -- tried first, so Option 1/2/3 keep giving genuinely
+        different picks in the normal case.
+    full_candidates: optional COMPLETE ranked list of every eligible fund
+        for this bucket (not just this option's tranche). Used only as a
+        fallback when tranche_candidates truly can't diversify a slot --
+        e.g. every candidate in the tranche shares the same over-cap
+        category. Reaching into the full pool is a last resort to break
+        that specific violation, not a way to add extra diversity beyond
+        what's needed.
+
+    At each slot: try the tranche first, picking the first ranked
+    candidate that keeps its category under the cap (projecting the
+    score-weighted split as if only the funds chosen so far, plus this
+    candidate, were selected). If nothing in the tranche works, try the
+    full pool the same way. If nothing anywhere avoids the cap, fall back
+    to the tranche's next-best fund regardless of category -- the bucket
+    is allowed to exceed the cap rather than force in an unrelated fund
+    just to fill the slot.
 
     Returns the selected funds in the order chosen.
     """
-    if not funds_list:
+    if not tranche_candidates:
         return []
 
-    selected = []
-    remaining = list(funds_list)
-
-    while len(selected) < num_funds and remaining:
-        chosen = None
-
-        for candidate in remaining:
+    def first_non_violating(pool, selected):
+        for candidate in pool:
             trial = selected + [candidate]
             total_score = sum(f.score for f in trial if f.score)
 
@@ -74,19 +79,40 @@ def select_diversified_funds(funds_list, allocation_pct, num_funds, max_sector_p
 
                 candidate_cat = candidate.morningstar_cat or 'Uncategorized'
                 if cat_totals[candidate_cat] <= max_sector_pct:
-                    chosen = candidate
-                    break
+                    return candidate
             else:
-                chosen = candidate
+                return candidate
+        return None
+
+    selected = []
+    remaining = list(tranche_candidates)
+
+    tranche_ids = {id(f) for f in tranche_candidates}
+    fallback_pool = [f for f in (full_candidates or []) if id(f) not in tranche_ids]
+
+    while len(selected) < num_funds and (remaining or fallback_pool):
+        # 1. Try this option's own tranche first (keeps options distinct)
+        chosen = first_non_violating(remaining, selected)
+        source_list = remaining
+
+        # 2. Tranche can't diversify this slot -- reach into the full pool
+        if chosen is None and fallback_pool:
+            chosen = first_non_violating(fallback_pool, selected)
+            source_list = fallback_pool
+
+        # 3. Nothing anywhere avoids the cap -- accept the violation
+        if chosen is None:
+            if remaining:
+                chosen = remaining[0]
+                source_list = remaining
+            elif fallback_pool:
+                chosen = fallback_pool[0]
+                source_list = fallback_pool
+            else:
                 break
 
-        if chosen is None:
-            # No candidate avoids the cap -- accept the bucket exceeding it
-            # rather than force in an unrelated fund for a small leftover %
-            chosen = remaining[0]
-
         selected.append(chosen)
-        remaining.remove(chosen)
+        source_list.remove(chosen)
 
     return selected
 
@@ -191,7 +217,7 @@ def apply_sector_cap(rows, max_pct=0.20, max_iterations=10, excluded_allocations
     return [tuple(r) for r in rows]
 
 
-def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
+def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20, full_ranked_funds=None):
     """
     Build fund rows with score-weighted allocations.
     Fixes the total % bug by normalizing to exactly 100%.
@@ -202,12 +228,17 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     fund.morningstar_cat category exceed max_sector_pct of the whole
     portfolio when better-diversified alternatives exist, rather than
     picking the naive top-N and clipping/redistributing after the fact.
-    If no alternative exists, the bucket is allowed to exceed the cap.
+    If the option's own candidate tranche can't diversify a slot,
+    full_ranked_funds (the bucket's complete ranked candidate list, not
+    just this option's tranche) is used as a fallback pool before
+    accepting a cap violation. If no alternative exists anywhere, the
+    bucket is allowed to exceed the cap.
     Rounds each fund's % using largest-remainder rounding, scoped
     independently per allocation bucket, so a bucket's total can never
     drift because of rounding elsewhere in the portfolio.
     Returns list of (fund, fund_pct, allocation_name) tuples.
     """
+    full_ranked_funds = full_ranked_funds or {}
     rows = []
 
     for allocation_name, allocation_info in allocations.items():
@@ -221,7 +252,9 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
 
         num_funds = get_num_funds(allocation_pct)
         selected_funds = select_diversified_funds(
-            funds_list, allocation_pct, num_funds, max_sector_pct=max_sector_pct
+            funds_list, allocation_pct, num_funds,
+            max_sector_pct=max_sector_pct,
+            full_candidates=full_ranked_funds.get(allocation_name)
         )
 
         # Score-weighted split within allocation
@@ -396,7 +429,8 @@ def build_portfolio_report(
     investment_amount: float,
     option_number: int = None,
     fund_source: str = "403b Funds",
-    max_sector_pct: float = 0.20
+    max_sector_pct: float = 0.20,
+    full_ranked_funds: dict = None
 ) -> BytesIO:
     """
     Build a professional PDF portfolio report.
@@ -499,7 +533,7 @@ def build_portfolio_report(
 
     # --- Pie Chart ---
     # --- Build rows first (needed for everything below) ---
-    rows = build_portfolio_rows(portfolio, allocations, max_sector_pct=max_sector_pct)
+    rows = build_portfolio_rows(portfolio, allocations, max_sector_pct=max_sector_pct, full_ranked_funds=full_ranked_funds)
     asset_summary = build_asset_class_summary(rows)
 
     # --- Asset Class Summary Table + Pie Chart (side by side) ---
@@ -580,7 +614,7 @@ def build_portfolio_report(
             yield_display = '0.00%'
 
         # Total return
-        total_return = f"{fund.return_1yr * 100:.2f}%" if fund.return_1yr else '0.00%'
+        total_return = f"{fund.return_3yr * 100:.2f}%" if fund.return_3yr else '0.00%'
 
         row = [
             Paragraph(ticker, center_cell_style),
