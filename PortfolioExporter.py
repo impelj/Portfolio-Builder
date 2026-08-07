@@ -203,6 +203,9 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     portfolio when better-diversified alternatives exist, rather than
     picking the naive top-N and clipping/redistributing after the fact.
     If no alternative exists, the bucket is allowed to exceed the cap.
+    Rounds each fund's % using largest-remainder rounding, scoped
+    independently per allocation bucket, so a bucket's total can never
+    drift because of rounding elsewhere in the portfolio.
     Returns list of (fund, fund_pct, allocation_name) tuples.
     """
     rows = []
@@ -243,18 +246,33 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     # Cap reinsurance "Risk Prm" funds at 3% of the whole portfolio
     rows = apply_risk_prm_cap(rows, allocations)
 
-    # Round allocations and fix rounding errors
-    rounded = [(fund, round(pct * 100), name) for fund, pct, name in rows]
+    # Round each fund's % using largest-remainder rounding, applied
+    # independently PER BUCKET. This guarantees every bucket's rounded
+    # total exactly matches its own current sum (its Allocations.py target,
+    # unless legitimately shifted by the scale-up above or by
+    # apply_risk_prm_cap) -- rounding drift can never cross a bucket
+    # boundary and land on an unrelated fund in a different bucket.
+    bucket_indices = defaultdict(list)
+    for i, (fund, pct, name) in enumerate(rows):
+        bucket_indices[name].append(i)
 
-    # Fix rounding so it sums to exactly 100
-    target = round(expected_total * 100)
-    diff = target - sum(pct for _, pct, _ in rounded)
+    rounded_pct = [0] * len(rows)
 
-    if diff != 0:
-        # Add/subtract the difference from the largest allocation
-        largest_idx = max(range(len(rounded)), key=lambda i: rounded[i][1])
-        fund, pct, name = rounded[largest_idx]
-        rounded[largest_idx] = (fund, pct + diff, name)
+    for allocation_name, indices in bucket_indices.items():
+        bucket_sum = sum(rows[i][1] for i in indices) * 100
+        bucket_target_int = round(bucket_sum)
+
+        floors = [(i, int(rows[i][1] * 100), (rows[i][1] * 100) - int(rows[i][1] * 100)) for i in indices]
+        floor_sum = sum(f for _, f, _ in floors)
+        remainder_needed = bucket_target_int - floor_sum
+
+        # Give the +1s to the funds with the largest fractional remainder first
+        floors_sorted = sorted(floors, key=lambda x: x[2], reverse=True)
+        for rank, (i, floor_val, _) in enumerate(floors_sorted):
+            bump = 1 if rank < remainder_needed else 0
+            rounded_pct[i] = floor_val + bump
+
+    rounded = [(rows[i][0], rounded_pct[i], rows[i][2]) for i in range(len(rows))]
 
     return rounded
 
