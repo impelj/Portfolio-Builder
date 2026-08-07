@@ -7,7 +7,7 @@ from PortfolioExporter import build_portfolio_report
 
 st.set_page_config(page_title="Portfolio Builder", layout="wide")
 
-st.title("Portfolio Builder")
+st.title("403b Portfolio Builder")
 st.markdown("Selects top funds for each allocation category in each model portfolio.")
 st.subheader("How it works:")
 st.markdown(''' Funds are scored based on a combination of 5-year return, Sharpe Ratio and expense ratio to determine a cumlative scoring guideline for ranking funds within each allocation category. The scores are weighed most heavily on 5-year return counting for 60% of the score, followed by Sharpe at 25% and Expense Ratio at 15%.''')
@@ -67,7 +67,18 @@ def load_funds(file_bytes: bytes):
     return funds
 
 
-    
+def parse_fund_source(filename: str) -> str:
+    """
+    Derive the fund source label from the uploaded file name.
+    'First_Trust_Funds.xlsx' -> 'First Trust Funds'
+    Falls back to '403b Funds' if filename is missing or unparseable.
+    """
+    if not filename:
+        return "403b Funds"
+    base = filename[:-5] if filename.lower().endswith('.xlsx') else filename
+    parts = [p for p in base.split('_') if p]
+    return ' '.join(parts) if parts else "403b Funds"
+
 
 def load_default_funds():
     with open('Aspire_403b_funds.xlsx', 'rb') as f:
@@ -76,9 +87,11 @@ def load_default_funds():
 try:
     if uploaded_file is not None:
         funds = load_funds(uploaded_file.read())
+        fund_source = parse_fund_source(uploaded_file.name)
         st.success(f"✓ Loaded {len(funds)} funds from {uploaded_file.name}")
     else:
         funds = load_default_funds()
+        fund_source = "403b Funds"
         st.success(f"✓ Loaded {len(funds)} funds from default Aspire 403b universe")
 except Exception as e:
     st.error(f"Error loading Excel file: {e}")
@@ -223,7 +236,8 @@ if st.button("Generate PDF Report"):
                 client_name=client_name,
                 portfolio_name=portfolio_choice,
                 investment_amount=investment_amount,
-                option_number=option_choice
+                option_number=option_choice,
+                fund_source=fund_source
             )
 
         st.download_button(
