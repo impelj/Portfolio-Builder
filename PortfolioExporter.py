@@ -674,7 +674,7 @@ def build_portfolio_report(
             yield_display = '0.00%'
 
         # Total return
-        total_return = f"{fund.return_1yr * 100:.2f}%" if fund.return_1yr else '0.00%'
+        total_return = f"{fund.return_3yr * 100:.2f}%" if fund.return_3yr else '0.00%'
 
         row = [
             Paragraph(ticker, center_cell_style),
@@ -694,7 +694,7 @@ def build_portfolio_report(
         avg_volatility = sum(fund.std3yr * pct for fund, pct, _ in rows) / total_pct
         avg_expense = sum(fund.expense_ratio * pct for fund, pct, _ in rows) / total_pct
         avg_yield = sum(fund.yield_val * pct for fund, pct, _ in rows) / total_pct
-        avg_return = sum(fund.return_1yr * 100 * pct for fund, pct, _ in rows) / total_pct
+        avg_return = sum(fund.return_3yr * 100 * pct for fund, pct, _ in rows) / total_pct
     else:
         avg_volatility = avg_expense = avg_yield = avg_return = 0
     table_data.append([
