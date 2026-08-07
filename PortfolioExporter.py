@@ -35,6 +35,62 @@ def get_num_funds(allocation_pct: float) -> int:
         return 3
 
 
+def select_diversified_funds(funds_list, allocation_pct, num_funds, max_sector_pct=0.20):
+    """
+    Greedily select up to num_funds funds from a ranked (highest score first)
+    candidate list, preferring funds whose category won't push that
+    category's score-weighted share over max_sector_pct of the WHOLE
+    portfolio (not just this bucket).
+
+    At each slot, walks the remaining ranked candidates in order and picks
+    the first one that keeps its category under the cap, projecting the
+    score-weighted split as if only the funds chosen so far (plus this
+    candidate) were selected. If every remaining candidate would violate
+    the cap (e.g. the whole category list for this bucket is one sector),
+    falls back to the next best-ranked fund regardless of category --
+    the bucket is allowed to exceed the cap rather than force in an
+    unrelated fund just to fill the slot.
+
+    Returns the selected funds in the order chosen.
+    """
+    if not funds_list:
+        return []
+
+    selected = []
+    remaining = list(funds_list)
+
+    while len(selected) < num_funds and remaining:
+        chosen = None
+
+        for candidate in remaining:
+            trial = selected + [candidate]
+            total_score = sum(f.score for f in trial if f.score)
+
+            if total_score > 0:
+                cat_totals = defaultdict(float)
+                for f in trial:
+                    fund_pct = (f.score / total_score) * allocation_pct
+                    cat_totals[f.morningstar_cat or 'Uncategorized'] += fund_pct
+
+                candidate_cat = candidate.morningstar_cat or 'Uncategorized'
+                if cat_totals[candidate_cat] <= max_sector_pct:
+                    chosen = candidate
+                    break
+            else:
+                chosen = candidate
+                break
+
+        if chosen is None:
+            # No candidate avoids the cap -- accept the bucket exceeding it
+            # rather than force in an unrelated fund for a small leftover %
+            chosen = remaining[0]
+
+        selected.append(chosen)
+        remaining.remove(chosen)
+
+    return selected
+
+
 def apply_risk_prm_cap(rows, allocations, name_substring=' Risk Prm', cap_pct=0.03):
     """
     Caps any fund whose name contains `name_substring` (e.g. reinsurance
@@ -141,9 +197,12 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
     Fixes the total % bug by normalizing to exactly 100%.
     Caps "Risk Prm" (reinsurance risk premia) funds at 3% of the whole
     portfolio, redistributing excess elsewhere.
-    Enforces a max_sector_pct cap per asset class (fund.morningstar_cat)
-    within equity buckets only, redistributing any excess to other equity
-    funds. Short-term Fixed Income and Other Fixed Income are exempt.
+    Fund selection within each bucket is diversification-aware
+    (select_diversified_funds): it avoids letting a single
+    fund.morningstar_cat category exceed max_sector_pct of the whole
+    portfolio when better-diversified alternatives exist, rather than
+    picking the naive top-N and clipping/redistributing after the fact.
+    If no alternative exists, the bucket is allowed to exceed the cap.
     Returns list of (fund, fund_pct, allocation_name) tuples.
     """
     rows = []
@@ -158,7 +217,9 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
             continue
 
         num_funds = get_num_funds(allocation_pct)
-        selected_funds = funds_list[:num_funds]
+        selected_funds = select_diversified_funds(
+            funds_list, allocation_pct, num_funds, max_sector_pct=max_sector_pct
+        )
 
         # Score-weighted split within allocation
         total_score = sum(f.score for f in selected_funds if f.score)
@@ -179,12 +240,8 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20):
         scale = expected_total / raw_total
         rows = [(fund, pct * scale, name) for fund, pct, name in rows]
 
-    # Cap reinsurance "Risk Prm" funds at 2.5% of Short-term Fixed Income's target
+    # Cap reinsurance "Risk Prm" funds at 3% of the whole portfolio
     rows = apply_risk_prm_cap(rows, allocations)
-
-    # Enforce sector concentration cap (equity buckets only -- fixed income
-    # sleeves are legitimately meant to be concentrated by design)
-    rows = apply_sector_cap(rows, max_pct=max_sector_pct, excluded_allocations=FIXED_INCOME_BUCKETS)
 
     # Round allocations and fix rounding errors
     rounded = [(fund, round(pct * 100), name) for fund, pct, name in rows]
