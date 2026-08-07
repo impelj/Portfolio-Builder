@@ -7,7 +7,7 @@ from PortfolioExporter import build_portfolio_report
 
 st.set_page_config(page_title="Portfolio Builder", layout="wide")
 
-st.title("403b Portfolio Builder")
+st.title("Portfolio Builder")
 st.markdown("Selects top funds for each allocation category in each model portfolio.")
 st.subheader("How it works:")
 st.markdown(''' Funds are scored based on a combination of 5-year return, Sharpe Ratio and expense ratio to determine a cumlative scoring guideline for ranking funds within each allocation category. The scores are weighed most heavily on 5-year return counting for 60% of the score, followed by Sharpe at 25% and Expense Ratio at 15%.''')
@@ -106,15 +106,15 @@ st.sidebar.markdown(f'Change weighting of scoring factors:')
 if 'weight_return' not in st.session_state:
     st.session_state.weight_return = 50
 if 'weight_sharpe' not in st.session_state:
-    st.session_state.weight_sharpe = 10
+    st.session_state.weight_sharpe = 5
 if 'weight_expense' not in st.session_state:
-    st.session_state.weight_expense = 40
+    st.session_state.weight_expense = 45
 
 # Reset button
 def reset_weights():
     st.session_state.weight_return = 50
-    st.session_state.weight_sharpe = 10
-    st.session_state.weight_expense = 40
+    st.session_state.weight_sharpe = 5
+    st.session_state.weight_expense = 45
 
 
 weight_return = st.sidebar.slider("Weight for 5-year return", 0, 100, key='weight_return', step=5)
