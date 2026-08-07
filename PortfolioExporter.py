@@ -207,7 +207,8 @@ def build_portfolio_report(
     client_name: str,
     portfolio_name: str,
     investment_amount: float,
-    option_number: int = None
+    option_number: int = None,
+    fund_source: str = "403b Funds"
 ) -> BytesIO:
     """
     Build a professional PDF portfolio report.
@@ -283,7 +284,8 @@ def build_portfolio_report(
     header_data = [
         [
             Paragraph(
-            f'<b>LIONHEART</b><br/><font size=14>{portfolio_name}</font>',
+            f'<b>LIONHEART</b><br/><font size=14>{portfolio_name}</font>'
+            f'<br/><font size=10 color="#336699">{fund_source}</font>',
                 ParagraphStyle('Logo', fontSize=18, textColor=DARK_BLUE, fontName='Helvetica-Bold')
             ),
             Paragraph(
