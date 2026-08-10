@@ -223,7 +223,7 @@ PORTFOLIO_ALLOCATIONS = {
                 'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
-                'pct': 0.075,
+                'pct': 0.08,
                 'categories': ['Industrials', 'Small Value', 'Small Blend', 'Small Growth', 'Natural Resources']
             },
             'Non-US Equity Large Cap': {
@@ -232,7 +232,7 @@ PORTFOLIO_ALLOCATIONS = {
                                 'Foreign Large Blend', 'Foreign Large Growth', 'Foreign Large Value', 'India Equity', 'Global Aggressive Allocation']
             },
             'Non-US Equity Emerging Markets': {
-                'pct': 0.075,
+                'pct': 0.07,
                 'categories': ['Diversified Emerging Markets', 'Emerging-Markets Local-Currency Bond']
             },
             'Real Estate': {
