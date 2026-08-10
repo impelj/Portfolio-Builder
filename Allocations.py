@@ -14,7 +14,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.03,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
+                'categories': ['Technology', 'Pharmaceuticals', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'Non-US Equity Large Cap': {
                 'pct': 0.05,
@@ -52,7 +52,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income','Equity-Income','Equity Precious Metals', 'Energy Limited Partnership']
+                'categories': ['Technology', 'Pharmaceuticals', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income','Equity-Income','Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.03,
@@ -94,7 +94,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.07,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income','Equity-Income','Equity Precious Metals', 'Energy Limited Partnership']
+                'categories': ['Technology', 'Pharmaceuticals', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income','Equity-Income','Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.03,
@@ -136,7 +136,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.10,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
+                'categories': ['Technology', 'Pharmaceuticals', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.05,
@@ -178,7 +178,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.13,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
+                'categories': ['Technology', 'Pharmaceuticals', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.07,
@@ -220,7 +220,7 @@ PORTFOLIO_ALLOCATIONS = {
             },
             'US Equity Mid Cap': {
                 'pct': 0.15,
-                'categories': ['Technology', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
+                'categories': ['Technology', 'Pharmaceuticals', 'Mid-Cap Value', 'Mid-Cap Blend', 'Mid-Cap Growth', 'Growth and Income', 'Equity-Income', 'Equity Precious Metals', 'Energy Limited Partnership']
             },
             'US Equity Small Cap': {
                 'pct': 0.08,
