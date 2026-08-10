@@ -104,17 +104,17 @@ top_n = st.sidebar.slider("Number of funds per allocation", 3, 10, 5)
 
 st.sidebar.markdown(f'Change weighting of scoring factors:')
 if 'weight_return' not in st.session_state:
-    st.session_state.weight_return = 50
+    st.session_state.weight_return = 45
 if 'weight_sharpe' not in st.session_state:
-    st.session_state.weight_sharpe = 10
+    st.session_state.weight_sharpe = 5
 if 'weight_expense' not in st.session_state:
-    st.session_state.weight_expense = 40
+    st.session_state.weight_expense = 50
 
 # Reset button
 def reset_weights():
-    st.session_state.weight_return = 50
-    st.session_state.weight_sharpe = 10
-    st.session_state.weight_expense = 40
+    st.session_state.weight_return = 45
+    st.session_state.weight_sharpe = 5
+    st.session_state.weight_expense = 50
 
 
 weight_return = st.sidebar.slider("Weight for 5-year return", 0, 100, key='weight_return', step=5)
