@@ -100,7 +100,7 @@ except Exception as e:
 
 # Sidebar control for number of top funds
 st.sidebar.header("Portfolio Settings")
-top_n = st.sidebar.slider("Number of funds per allocation", 3, 10, 5)
+top_n = st.sidebar.slider("Number of funds per allocation", 3, 10, 3)
 
 st.sidebar.markdown(f'Change weighting of scoring factors:')
 if 'weight_return' not in st.session_state:
