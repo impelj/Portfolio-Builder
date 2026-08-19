@@ -365,6 +365,20 @@ def build_portfolio_rows(portfolio, allocations, max_sector_pct=0.20, full_ranke
             bump = 1 if rank < remainder_needed else 0
             rounded_pct[i] = floor_val + bump
 
+    # Per-bucket rounding is independently correct within each bucket, but
+    # independent rounding across 7-9 buckets can drift the grand total off
+    # 100 by a point or two (each bucket rounds its own ~0.5 remainder
+    # separately, and those don't cancel out). Force the grand total back
+    # to exactly 100 by adjusting the single largest holding -- a 1-2 point
+    # nudge on the biggest position is invisible next to independent
+    # per-bucket rounding, and far less noticeable than the total being
+    # wrong outright.
+    expected_total_int = round(expected_total * 100)
+    grand_diff = expected_total_int - sum(rounded_pct)
+    if grand_diff != 0 and rounded_pct:
+        largest_i = max(range(len(rounded_pct)), key=lambda i: rounded_pct[i])
+        rounded_pct[largest_i] += grand_diff
+
     rounded = [(rows[i][0], rounded_pct[i], rows[i][2]) for i in range(len(rows))]
 
     return rounded
