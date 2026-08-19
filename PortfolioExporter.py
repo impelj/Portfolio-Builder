@@ -651,7 +651,7 @@ def build_portfolio_report(
 
     col_headers = [
         'Symbol', 'Allocation\n%', 'Volatility', 'Name',
-        'Asset Class', 'Expense\nRatio', 'Yield', '3 YR Total\nReturn'
+        'Asset Class', 'Expense\nRatio', 'Yield', '3 YR Average\nReturn'
     ]
     col_widths = [
         0.55*inch, 0.85*inch, 0.65*inch, 1.8*inch,
